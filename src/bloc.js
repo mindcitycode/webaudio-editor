@@ -6,6 +6,12 @@
 // biquad
 // dynamicsCOmpressor
 // oscillator
+const getScrollPosition = () => {
+    return {
+        x: document.documentElement.scrollLeft || document.body.scrollLeft,
+        y: document.documentElement.scrollTop || document.body.scrollTop
+    }
+}
 
 const rootDiv = document.createElement('div')
 rootDiv.id = 'root'
@@ -63,8 +69,10 @@ function mover() {
         if (state === 'moving') {
             const { movementX, movementY } = e
             var rect = audioNode.getBoundingClientRect();
-            const x = rect.left + movementX
-            const y = rect.top + movementY
+            const scroll = getScrollPosition()
+
+            const x = rect.left + movementX + scroll.x
+            const y = rect.top + movementY + scroll.y
             audioNode.style.left = `${x}px`
             audioNode.style.top = `${y}px`
         }
@@ -233,12 +241,6 @@ const getLinks = () => {
     return links
 }
 
-const scrollPosition = () => {
-    return {
-        x: document.documentElement.scrollLeft || document.body.scrollLeft,
-        y: document.documentElement.scrollTop || document.body.scrollTop
-    }
-}
 
 {
     const canvas = document.createElement('canvas')
@@ -250,7 +252,7 @@ const scrollPosition = () => {
 
 
     rafLoop((delta, time) => {
-        const topleft = scrollPosition()
+        const topleft = getScrollPosition()
         canvas.style.left = `${topleft.x}px`
         canvas.style.top = `${topleft.y}px`
         console.log(document.documentElement.scrollTop)
