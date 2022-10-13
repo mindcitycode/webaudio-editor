@@ -1,0 +1,42 @@
+* {
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    user-select: none;
+}
+
+div.wa-audio-node option,
+div.wa-audio-node select,
+html {
+    font-family: monospace;
+    font-size: 11px;
+}
+
+div.wa-audio-node option,
+div.wa-audio-node select,
+div.wa-audio-node {
+    background-color: rgb(205, 205, 205);
+}
+div.wa-audio-node:hover {
+    background-color: rgb(205, 205, 250);
+}
+
+div.wa-audio-node {
+    border: 1px solid black;
+    position: absolute;
+    width: 100px;
+}
+
+div.wa-audio-node h1 {
+    font-size: 12px;
+    text-align: center;
+}
+
+div.wa-audio-input,
+div.wa-audio-param {
+    color: black;
+}
+
+div.wa-audio-output p {
+    text-align: right;
+}

@@ -10,13 +10,13 @@ const config = {
     //  output: {
     //     filename: "./dist/app.bundle.js" //relative to root of the application
     plugins: [
-        /*
+    
         new CopyPlugin({
             patterns: [
                 { from: "assets", to: "assets" },
-                { from: "favicon.ico", to: "favicon.ico" },
+           //     { from: "favicon.ico", to: "favicon.ico" },
             ],
-        }),*/
+        }),
         new HtmlWebpackPlugin({
             hash: true,
             filename: './index.html', //relative to root of the application,
@@ -33,7 +33,21 @@ const config = {
 
     watchOptions: {
         ignored: /\.#|node_modules|~$/,
-    }
+    },
+    module: {
+        rules: [
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
+            {
+                test: /\.(js|jsx)$/,
+                use: {
+                    loader: 'babel-loader'
+                }
+            }
+        ],
+    },
 }
 
 module.exports = (env, args) => {

@@ -1,0 +1,469 @@
+{
+    "createMediaElementSource": {
+      "unfit": []
+    },
+    "createMediaStreamSource": {
+      "unfit": []
+    },
+    "createMediaStreamTrackSource": {
+      "unfit": []
+    },
+    "createMediaStreamDestination": {
+      "unfit": [],
+      "MediaStream": {
+        "stream": 1
+      },
+      "Function": {
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "Number": {
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createBuffer": {
+      "unfit": []
+    },
+    "createBufferSource": {
+      "unfit": [
+        "buffer",
+        "onended"
+      ],
+      "Function": {
+        "start": 1,
+        "stop": 1,
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioParam": {
+        "playbackRate": 1,
+        "detune": 1
+      },
+      "Boolean": {
+        "loop": 1
+      },
+      "Number": {
+        "loopStart": 1,
+        "loopEnd": 1,
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createConstantSource": {
+      "unfit": [
+        "onended"
+      ],
+      "AudioParam": {
+        "offset": 1
+      },
+      "Function": {
+        "start": 1,
+        "stop": 1,
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "Number": {
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createScriptProcessor": {
+      "unfit": [
+        "onaudioprocess"
+      ],
+      "Number": {
+        "bufferSize": 1,
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "Function": {
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createAnalyser": {
+      "unfit": [],
+      "Function": {
+        "getFloatFrequencyData": 1,
+        "getByteFrequencyData": 1,
+        "getFloatTimeDomainData": 1,
+        "getByteTimeDomainData": 1,
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "Number": {
+        "fftSize": 1,
+        "frequencyBinCount": 1,
+        "minDecibels": 1,
+        "maxDecibels": 1,
+        "smoothingTimeConstant": 1,
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createGain": {
+      "unfit": [],
+      "AudioParam": {
+        "gain": 1
+      },
+      "Function": {
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "Number": {
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createDelay": {
+      "unfit": [],
+      "AudioParam": {
+        "delayTime": 1
+      },
+      "Function": {
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "Number": {
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createBiquadFilter": {
+      "unfit": [],
+      "Function": {
+        "getFrequencyResponse": 1,
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "String": {
+        "type": 1,
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      },
+      "AudioParam": {
+        "frequency": 1,
+        "detune": 1,
+        "Q": 1,
+        "gain": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "Number": {
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      }
+    },
+    "createIIRFilter": {
+      "unfit": []
+    },
+    "createWaveShaper": {
+      "unfit": [
+        "curve"
+      ],
+      "String": {
+        "oversample": 1,
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      },
+      "Function": {
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "Number": {
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      }
+    },
+    "createPanner": {
+      "unfit": [],
+      "Function": {
+        "setPosition": 1,
+        "setOrientation": 1,
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "String": {
+        "panningModel": 1,
+        "distanceModel": 1,
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      },
+      "AudioParam": {
+        "positionX": 1,
+        "positionY": 1,
+        "positionZ": 1,
+        "orientationX": 1,
+        "orientationY": 1,
+        "orientationZ": 1
+      },
+      "Number": {
+        "refDistance": 1,
+        "maxDistance": 1,
+        "rolloffFactor": 1,
+        "coneInnerAngle": 1,
+        "coneOuterAngle": 1,
+        "coneOuterGain": 1,
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "AudioContext": {
+        "context": 1
+      }
+    },
+    "createStereoPanner": {
+      "unfit": [],
+      "AudioParam": {
+        "pan": 1
+      },
+      "Function": {
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "Number": {
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createConvolver": {
+      "unfit": [
+        "buffer"
+      ],
+      "Boolean": {
+        "normalize": 1
+      },
+      "Function": {
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "Number": {
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createChannelSplitter": {
+      "unfit": [],
+      "Function": {
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "Number": {
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createChannelMerger": {
+      "unfit": [],
+      "Function": {
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "Number": {
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createDynamicsCompressor": {
+      "unfit": [],
+      "AudioParam": {
+        "threshold": 1,
+        "knee": 1,
+        "ratio": 1,
+        "attack": 1,
+        "release": 1
+      },
+      "Number": {
+        "reduction": 1,
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      },
+      "Function": {
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "String": {
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      }
+    },
+    "createOscillator": {
+      "unfit": [
+        "onended"
+      ],
+      "Function": {
+        "setPeriodicWave": 1,
+        "start": 1,
+        "stop": 1,
+        "connect": 1,
+        "disconnect": 1,
+        "addEventListener": 1,
+        "removeEventListener": 1,
+        "dispatchEvent": 1
+      },
+      "String": {
+        "type": 1,
+        "channelCountMode": 1,
+        "channelInterpretation": 1
+      },
+      "AudioParam": {
+        "frequency": 1,
+        "detune": 1
+      },
+      "AudioContext": {
+        "context": 1
+      },
+      "Number": {
+        "numberOfInputs": 1,
+        "numberOfOutputs": 1,
+        "channelCount": 1
+      }
+    },
+    "createPeriodicWave": {
+      "unfit": []
+    }
+  }
