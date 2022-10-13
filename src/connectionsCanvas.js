@@ -1,7 +1,44 @@
 import { rafLoop } from './lib/loop.js'
-import {getScrollPosition} from './dom.js'
+import { getScrollPosition } from './dom.js'
 
-export const ConnectionCanvas = ( getLinks ) => {
+export const getLinks = synth => () => {
+
+    const connectedElements = []
+    synth.description.connections.forEach(([from, to]) => {
+        const fromId = from.id
+        const toId = to.id
+        const fromElement = document.getElementById(fromId)
+        const toElement = document.getElementById(toId)
+        if (fromElement && toElement) {
+            connectedElements.push({ fromElement, toElement })
+        }
+    })
+
+    const links = []
+    connectedElements.forEach(({ fromElement, toElement }) => {
+
+        const fromRect = fromElement.getBoundingClientRect()
+        const toRect = toElement.getBoundingClientRect()
+
+        const from = {
+            x: fromRect.right,
+            y: (fromRect.top + fromRect.bottom) / 2
+        }
+        const to = {
+            x: toRect.left,
+            y: (toRect.top + toRect.bottom) / 2
+        }
+        links.push(
+            { from, to }
+        )
+
+    })
+
+    return links
+}
+
+
+export const ConnectionCanvas = (getLinks) => {
     const canvas = document.createElement('canvas')
     canvas.classList.add('link')
     document.body.append(canvas)

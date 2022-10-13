@@ -96,31 +96,3 @@ export const Bloc = (createFn, audioNode) => {
 }
 */
 
-const getLinks = () => {
-
-    const links = []
-    const waSource = document.getElementsByClassName('wa-audio-output')[0]
-    const waDestination = document.getElementsByClassName('wa-audio-input')[3]
-
-    if (waSource && waDestination) {
-
-        const sourceRect = waSource.getBoundingClientRect()
-        const destinationRect = waDestination.getBoundingClientRect()
-
-        const from = {
-            x: sourceRect.right,
-            y: (sourceRect.top + sourceRect.bottom) / 2
-        }
-        const to = {
-            x: destinationRect.left,
-            y: (destinationRect.top + destinationRect.bottom) / 2
-        }
-        links.push(
-            { from, to }
-        )
-    }
-    return links
-}
-
-import { ConnectionCanvas } from './connectionsCanvas.js'
-ConnectionCanvas(getLinks)

@@ -6,15 +6,15 @@ export const defaultSynthDescription = {
         { id: '3', type: 'Destination' }
     ],
     connections: [
-        ['0', '3'],
-        ['1', '2'],
-        ['2', '3'],
+        [{ id: '0' }, { id: '3' }],
+        [{ id: '1' }, { id: '2' }],
+        [{ id: '2' }, { id: '3' }],
     ],
     positions: {
         '0': [10, 10],
-        '1': [200, 200],
-        '2': [400, 400],
-        '3': [500, 500],
+        '1': [100, 100],
+        '2': [200, 200],
+        '3': [300, 300],
     }
 }
 
@@ -42,12 +42,14 @@ export const loadAudioSynth = (ac, description) => {
         nodes[id] = node
     })
 
-    description.connections.forEach(([fromId, toId]) => {
+    description.connections.forEach(([from, to]) => {
+        const fromId = from.id
+        const toId = to.id
         nodes[fromId].connect(nodes[toId])
     })
 
     console.log(nodes)
-    return { description, nodes, state : 'ready' }
+    return { description, nodes, state: 'ready' }
 }
 
 export const startAudioSynth = (synth) => {

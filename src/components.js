@@ -1,9 +1,8 @@
-
 const rootDiv = document.createElement('div')
 rootDiv.id = 'root'
 document.body.appendChild(rootDiv)
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './boxes.css'
 function AudioParamBox(props) {
@@ -25,7 +24,10 @@ function OutputBox(props) {
     </div>
 }
 
-function AudioNodeOscillatorBox() {
+function AudioNodeOscillatorBox(props) {
+
+    const [left, top] = props.position.map(x => x + 'px')
+
     const [type, setType] = useState("sine")
     const types = ["sine", "square", "sawtooth", "triangle"]
     const audioNodeName = "oscillator"
@@ -33,7 +35,7 @@ function AudioNodeOscillatorBox() {
         <option key={type}> {type}</option>
     );
     return (
-        <div className="wa-audio-node movable">
+        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <select>{typeList}</select>
             <AudioParamBox name="detune"></AudioParamBox>
@@ -43,10 +45,12 @@ function AudioNodeOscillatorBox() {
     )
 }
 
-function AudioNodeGainBox() {
+function AudioNodeGainBox(props) {
+    const [left, top] = props.position.map(x => x + 'px')
+
     const audioNodeName = "gain"
     return (
-        <div className="wa-audio-node movable">
+        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox num="1"></InputBox>
             <AudioParamBox name="gain"></AudioParamBox>
@@ -54,10 +58,12 @@ function AudioNodeGainBox() {
         </div>
     )
 }
-function AudioNodeDelayBox() {
+function AudioNodeDelayBox(props) {
+    const [left, top] = props.position.map(x => x + 'px')
+
     const audioNodeName = "delay"
     return (
-        <div className="wa-audio-node movable">
+        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox num="1"></InputBox>
             <AudioParamBox name="delayTime"></AudioParamBox>
@@ -65,10 +71,12 @@ function AudioNodeDelayBox() {
         </div>
     )
 }
-function AudioNodeBiquadFilterBox() {
+function AudioNodeBiquadFilterBox(props) {
+    const [left, top] = props.position.map(x => x + 'px')
+
     const audioNodeName = "biquad"
     return (
-        <div className="wa-audio-node movable">
+        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox num="1"></InputBox>
             <AudioParamBox name="frequency"></AudioParamBox>
@@ -79,10 +87,12 @@ function AudioNodeBiquadFilterBox() {
         </div>
     )
 }
-function AudioNodeDynamicsCompressorBox() {
+function AudioNodeDynamicsCompressorBox(props) {
+    const [left, top] = props.position.map(x => x + 'px')
+
     const audioNodeName = "compressor"
     return (
-        <div className="wa-audio-node movable">
+        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox num="1"></InputBox>
             <AudioParamBox name="threshold"></AudioParamBox>
@@ -94,20 +104,24 @@ function AudioNodeDynamicsCompressorBox() {
         </div>
     )
 }
-function AudioNodeDynamicsConstantSourceBox() {
+function AudioNodeDynamicsConstantSourceBox(props) {
+    const [left, top] = props.position.map(x => x + 'px')
+
     const audioNodeName = "constant"
     return (
-        <div className="wa-audio-node movable">
+        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <AudioParamBox name="offset"></AudioParamBox>
             <OutputBox num="1"></OutputBox>
         </div>
     )
 }
-function AudioNodePannerBox() {
+function AudioNodePannerBox(props) {
+    const [left, top] = props.position.map(x => x + 'px')
+
     const audioNodeName = "panner"
     return (
-        <div className="wa-audio-node movable">
+        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox num="1"></InputBox>
             <AudioParamBox name="positionx"></AudioParamBox>
@@ -120,15 +134,68 @@ function AudioNodePannerBox() {
         </div>
     )
 }
-function AudioNodeDestinationBox(){
+function AudioNodeDestinationBox(props) {
+    const [left, top] = props.position.map(x => x + 'px')
+
     const audioNodeName = "destination"
     return (
-        <div className="wa-audio-node movable">
+        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox num="1"></InputBox>
         </div>
     )
 }
 
+const listeners = []
+export const refreshUI = msg => listeners.forEach(f => f(msg))
+const addListener = f => listeners.push(f)
+const removeListener = f => listeners.splice(listeners.indexOf(f), 1)
+
+function Synth() {
+
+    const [synths, setSynths] = useState([])
+    useEffect(() => {
+        function onSynthChange(value) {
+            console.log('synth updated', value)
+            setSynths([value])
+        }
+        addListener(onSynthChange)
+        return function cleanup() {
+            removeListener(onSynthChange)
+        }
+    })
+
+    const boxes = synths[0]?.description?.nodes.map((node) => {
+        const id = node.id
+        const position = synths[0].description.positions[id]
+        if (node.type === 'Oscillator') {
+            return <AudioNodeOscillatorBox key={id} id={id} position={position} />
+        } else if (node.type === 'Delay') {
+            return <AudioNodeDelayBox key={id} id={id} position={position} />
+        } else if (node.type === 'Destination') {
+            return <AudioNodeDestinationBox key={id} id={id} position={position} />
+        }
+    })
+
+    /*    const description = synth.description
+        updater.onupdate = () => {
+    
+        }
+      */
+    return (
+
+        <>
+            <pre>{synths[0]?.state}</pre>
+            <pre>{JSON.stringify(synths)}</pre>
+            {boxes}
+        </>
+        // { synth ? (<AudioNodeOscillatorBox />) : (<AudioNodeDelayBox />) }
+    )
+    /*.description?.nodes.forEach( node =>
+    <AudioNodeOscillatorBox/>
+*/
+    //<><AudioNodeOscillatorBox /><AudioNodeDelayBox /><AudioNodeGainBox /><AudioNodeBiquadFilterBox /><AudioNodeDynamicsCompressorBox /><AudioNodeDynamicsConstantSourceBox /><AudioNodePannerBox /><AudioNodeDestinationBox /></>
+    //  )
+}
 const root = createRoot(document.getElementById('root'));
-root.render(<><AudioNodeOscillatorBox /><AudioNodeDelayBox /><AudioNodeGainBox /><AudioNodeBiquadFilterBox /><AudioNodeDynamicsCompressorBox /><AudioNodeDynamicsConstantSourceBox /><AudioNodePannerBox /><AudioNodeDestinationBox/></>);
+root.render(<Synth />)
