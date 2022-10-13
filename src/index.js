@@ -6,8 +6,18 @@ import { Bloc } from './bloc.js'
 
 
 import './components.js'
-const go = async () => {
+import { loadAudioSynth, defaultSynthDescription, startAudioSynth, stopAudioSynth } from './import.js'
 
+const go = async () => {
+    const ac = await waitAudioContext()
+    const synth = loadAudioSynth(ac, defaultSynthDescription)
+    startAudioSynth(synth)
+    setTimeout(() => {
+        stopAudioSynth(synth)
+    }, 1000)
+}
+
+const unused = async () => {
     const ac = await waitAudioContext()
     //OneAudioWorket(ac)
     //   TwoAudioWorket(ac)

@@ -66,7 +66,7 @@ function AudioNodeDelayBox() {
     )
 }
 function AudioNodeBiquadFilterBox() {
-    const audioNodeName = "BiquadFilter"
+    const audioNodeName = "biquad"
     return (
         <div className="wa-audio-node movable">
             <h1>{audioNodeName}</h1>
@@ -80,7 +80,7 @@ function AudioNodeBiquadFilterBox() {
     )
 }
 function AudioNodeDynamicsCompressorBox() {
-    const audioNodeName = "DynamicsComp"
+    const audioNodeName = "compressor"
     return (
         <div className="wa-audio-node movable">
             <h1>{audioNodeName}</h1>
@@ -95,7 +95,7 @@ function AudioNodeDynamicsCompressorBox() {
     )
 }
 function AudioNodeDynamicsConstantSourceBox() {
-    const audioNodeName = "Constant"
+    const audioNodeName = "constant"
     return (
         <div className="wa-audio-node movable">
             <h1>{audioNodeName}</h1>
@@ -105,7 +105,7 @@ function AudioNodeDynamicsConstantSourceBox() {
     )
 }
 function AudioNodePannerBox() {
-    const audioNodeName = "Panner"
+    const audioNodeName = "panner"
     return (
         <div className="wa-audio-node movable">
             <h1>{audioNodeName}</h1>
