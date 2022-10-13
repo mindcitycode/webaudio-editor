@@ -174,7 +174,7 @@ function AudioNodePannerBox() {
 
 
 const root = createRoot(document.getElementById('root'));
-root.render(<><AudioNodeOscillatorBox /><AudioNodeDelayBox /><AudioNodeGainBox /><AudioNodeBiquadFilterBox /><AudioNodeDynamicsCompressorBox /><AudioNodeDynamicsConstantSourceBox /><AudioNodePannerBox/></>);
+root.render(<><AudioNodeOscillatorBox /><AudioNodeDelayBox /><AudioNodeGainBox /><AudioNodeBiquadFilterBox /><AudioNodeDynamicsCompressorBox /><AudioNodeDynamicsConstantSourceBox /><AudioNodePannerBox /></>);
 
 export const Bloc = (createFn, audioNode) => {
 
@@ -203,4 +203,59 @@ export const Bloc = (createFn, audioNode) => {
         }
     }
 
+}
+
+import { rafLoop } from './lib/loop.js'
+
+const getLinks = () => {
+
+    const links = []
+    const waSource = document.getElementsByClassName('wa-audio-output')[0]
+    const waDestination = document.getElementsByClassName('wa-audio-input')[3]
+ 
+    if (waSource && waDestination) {
+
+        const sourceRect = waSource.getBoundingClientRect()
+        const destinationRect = waDestination.getBoundingClientRect()
+
+        const from = {
+            x: sourceRect.right,
+            y: (sourceRect.top + sourceRect.bottom) / 2
+        }
+        const to = {
+            x: destinationRect.left,
+            y: (destinationRect.top + destinationRect.bottom) / 2
+        }
+        links.push(
+            { from, to }
+        )
+    }
+    return links
+}
+
+{
+    const canvas = document.createElement('canvas')
+    canvas.classList.add('link')
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    const ctx = canvas.getContext('2d')
+    document.body.append(canvas)
+
+
+    rafLoop((delta, time) => {
+        const links = getLinks()
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        links.forEach(({ from, to }) => {
+            ctx.strokeStyle = 'black'
+            ctx.beginPath()
+            ctx.moveTo(from.x, from.y)
+            const sw = to.x - from.x
+            ctx.bezierCurveTo(
+                from.x + sw, from.y,
+                to.x - sw, to.y,
+                to.x, to.y,
+            )
+            ctx.stroke()
+        })
+    })
 }

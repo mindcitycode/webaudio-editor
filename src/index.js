@@ -58,9 +58,10 @@ const TwoAudioWorket = async (ac) => {
 
 
 const go = async () => {
+
     const ac = await waitAudioContext()
     //OneAudioWorket(ac)
-    TwoAudioWorket(ac)
+    //   TwoAudioWorket(ac)
     // console.log(ac)
     const blackList = ['createMediaElementSource', 'createMediaStreamSource', 'createMediaStreamTrackSource', 'createBuffer', 'createIIRFilter', 'createPeriodicWave']
 

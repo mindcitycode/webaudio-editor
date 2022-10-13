@@ -40,3 +40,8 @@ div.wa-audio-param {
 div.wa-audio-output p {
     text-align: right;
 }
+canvas.link {
+    position : absolute;
+    pointer-events: none;
+    z-index: 999;
+}
