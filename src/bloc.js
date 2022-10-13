@@ -212,7 +212,7 @@ const getLinks = () => {
     const links = []
     const waSource = document.getElementsByClassName('wa-audio-output')[0]
     const waDestination = document.getElementsByClassName('wa-audio-input')[3]
- 
+
     if (waSource && waDestination) {
 
         const sourceRect = waSource.getBoundingClientRect()
@@ -233,6 +233,13 @@ const getLinks = () => {
     return links
 }
 
+const scrollPosition = () => {
+    return {
+        x: document.documentElement.scrollLeft || document.body.scrollLeft,
+        y: document.documentElement.scrollTop || document.body.scrollTop
+    }
+}
+
 {
     const canvas = document.createElement('canvas')
     canvas.classList.add('link')
@@ -243,6 +250,11 @@ const getLinks = () => {
 
 
     rafLoop((delta, time) => {
+        const topleft = scrollPosition()
+        canvas.style.left = `${topleft.x}px`
+        canvas.style.top = `${topleft.y}px`
+        console.log(document.documentElement.scrollTop)
+        //canvas.style.left = ``
         const links = getLinks()
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         links.forEach(({ from, to }) => {
