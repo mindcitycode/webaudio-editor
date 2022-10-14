@@ -7,8 +7,20 @@ export const getLinks = synth => () => {
     synth.description.connections.forEach(([from, to]) => {
         const fromId = from.id
         const toId = to.id
-        const fromElement = document.getElementById(fromId)
-        const toElement = document.getElementById(toId)
+        const fromNode = document.getElementById(fromId)
+        if (!fromNode ) return 
+
+        let fromElement = fromNode.querySelector(`[name="${1}"].wa-audio-output`)
+        if (!fromElement ) return 
+
+        const toNode = document.getElementById(toId)
+        if (!toNode) return
+        let toElement = undefined
+        if (to.audioParam) {
+            toElement = toNode.querySelector(`[name="${to.audioParam}"].wa-audio-param`)
+        } else {
+            toElement = toNode.querySelector(`[name="${1}"].wa-audio-input`)
+        }
         if (fromElement && toElement) {
             connectedElements.push({ fromElement, toElement })
         }

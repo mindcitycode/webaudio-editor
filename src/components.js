@@ -6,20 +6,31 @@ import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './boxes.css'
 function AudioParamBox(props) {
+    const [editMode, setEditMode] = useState(false)
     const name = props.name
-    return <div className="wa-audio-param">
-        <p>~{name}</p>
+    const value = props.value
+    const editionClick = () => {
+        setEditMode(!editMode)
+    }
+    const editionEnter = (e) => {
+        if (e.key === 'Enter') {
+            setEditMode(false)
+        }
+    }
+//    <input type="text" onKeyDown={editionEnter} ></input>
+    return <div className="wa-audio-param" name={name}>
+        <p onClick={editionClick}>~{name} {value} {Math.random().toString()}</p>
     </div>
 }
 function InputBox(props) {
     const num = props.num
-    return <div className="wa-audio-input">
+    return <div className="wa-audio-input" name={num}>
         <p>~{num}</p>
     </div>
 }
 function OutputBox(props) {
     const num = props.num
-    return <div className="wa-audio-output">
+    return <div className="wa-audio-output" name={num}>
         <p>{num}~</p>
     </div>
 }
@@ -27,6 +38,7 @@ function OutputBox(props) {
 function AudioNodeOscillatorBox(props) {
 
     const [left, top] = props.position.map(x => x + 'px')
+    const node = props.node
 
     const [type, setType] = useState("sine")
     const types = ["sine", "square", "sawtooth", "triangle"]
@@ -39,7 +51,7 @@ function AudioNodeOscillatorBox(props) {
             <h1>{audioNodeName}</h1>
             <select>{typeList}</select>
             <AudioParamBox name="detune"></AudioParamBox>
-            <AudioParamBox name="frequency"></AudioParamBox>
+            <AudioParamBox name="frequency" value={node.audioParams.frequency}></AudioParamBox>
             <OutputBox num="1"></OutputBox>
         </div>
     )
@@ -153,11 +165,16 @@ const removeListener = f => listeners.splice(listeners.indexOf(f), 1)
 
 function Synth() {
 
-    const [synths, setSynths] = useState([])
+    const [descriptionNodes,setDescriptionNodes] = useState([])
+    const [positions,setPositions] = useState({})
+    const [synthState,setSynthState] = useState()
+
     useEffect(() => {
         function onSynthChange(value) {
             console.log('synth updated', value)
-            setSynths([value])
+            setDescriptionNodes(value.description.nodes)
+            setPositions(value.description.positions)
+            setSynthState(value.state)
         }
         addListener(onSynthChange)
         return function cleanup() {
@@ -165,11 +182,11 @@ function Synth() {
         }
     })
 
-    const boxes = synths[0]?.description?.nodes.map((node) => {
-        const id = node.id
-        const position = synths[0].description.positions[id]
+    const boxes = descriptionNodes?.map((node) => {
+        const id  = node.id
+        const position = positions[id]
         if (node.type === 'Oscillator') {
-            return <AudioNodeOscillatorBox key={id} id={id} position={position} />
+            return <AudioNodeOscillatorBox key={id} id={id} position={position} node={node} />
         } else if (node.type === 'Delay') {
             return <AudioNodeDelayBox key={id} id={id} position={position} />
         } else if (node.type === 'Destination') {
@@ -185,8 +202,7 @@ function Synth() {
     return (
 
         <>
-            <pre>{synths[0]?.state}</pre>
-            <pre>{JSON.stringify(synths)}</pre>
+            <pre>{synthState}</pre>
             {boxes}
         </>
         // { synth ? (<AudioNodeOscillatorBox />) : (<AudioNodeDelayBox />) }

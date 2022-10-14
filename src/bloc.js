@@ -40,8 +40,9 @@ function mover() {
             var rect = audioNode.getBoundingClientRect();
             const scroll = getScrollPosition()
 
-            const x = rect.left + movementX + scroll.x
-            const y = rect.top + movementY + scroll.y
+            const x = Math.max(0,rect.left + movementX + scroll.x)
+            const y = Math.max(0,rect.top + movementY + scroll.y)
+            
             audioNode.style.left = `${x}px`
             audioNode.style.top = `${y}px`
         }

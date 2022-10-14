@@ -6,16 +6,42 @@ export const defaultSynthDescription = {
         { id: '3', type: 'Destination' }
     ],
     connections: [
-        [{ id: '0' }, { id: '3' }],
+        [{ id: '0' }, { id: '1', audioParam: 'detune' }],
         [{ id: '1' }, { id: '2' }],
         [{ id: '2' }, { id: '3' }],
     ],
     positions: {
         '0': [10, 10],
-        '1': [100, 100],
-        '2': [200, 200],
-        '3': [300, 300],
+        '1': [200, 100],
+        '2': [400, 200],
+        '3': [600, 300],
     }
+}
+
+export const removeAudioNode = (ac, synth, nodeId) => {
+
+    const { description, nodes } = synth
+
+    // live
+    const node = nodes[nodeId]
+    if (node) {
+        if (node.stop) node.stop()
+        delete nodes[nodeId]
+    }
+
+    // description
+    delete description.nodes[nodeId]
+    description.connections = description.connections.filter(([[from, to]]) => {
+        if ((from.id === nodeId) || (to.id === nodeId)) {
+
+            nodes[from.id].disconnect(nodes[to.id])
+
+            return false
+        }
+        return true
+    })
+
+
 }
 
 export const loadAudioSynth = (ac, description) => {
@@ -45,7 +71,11 @@ export const loadAudioSynth = (ac, description) => {
     description.connections.forEach(([from, to]) => {
         const fromId = from.id
         const toId = to.id
-        nodes[fromId].connect(nodes[toId])
+        if (to.audioParam) {
+            nodes[fromId].connect(nodes[toId][to.audioParam])
+        } else {
+            nodes[fromId].connect(nodes[toId])
+        }
     })
 
     console.log(nodes)
