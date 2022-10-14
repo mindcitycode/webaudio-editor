@@ -82,6 +82,8 @@ export const loadAudioNode = (liveNodes, nodeDescription) => {
             for (let [name, value] of Object.entries(props)) {
                 node[name] = value
             }
+        } else {
+            nodeDescription.props = {}
         }
         getAudioNodeAudioParamNames(node).forEach(apName => {
             if (audioParams[apName] !== undefined) {
