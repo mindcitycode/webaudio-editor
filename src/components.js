@@ -244,10 +244,7 @@ import { addOrRemoveConnection } from './import.js';
 import { rafLoop } from './lib/loop';
 import { updateView } from './audiolib/graphicAnalyzer';
 
-const ConnectionManager = (synth) => {
-
-    console.log('create con man')
-
+const ConnectionClickManager = (synth) => {
 
     let lastInput = undefined
     let lastOutput = undefined
@@ -288,7 +285,7 @@ function Synth() {
             setDescriptionNodes(value.description.nodes)
             setPositions(value.description.positions)
             setSynthState(value.state)
-            setConnectionManager(ConnectionManager(value))
+            setConnectionManager(ConnectionClickManager(value))
             setLiveNodes(value.nodes)
         }
         refreshUIBus.addListener(onSynthChange)
