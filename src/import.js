@@ -58,17 +58,6 @@ export const removeAudioNode = (ac, synth, nodeId) => {
 }
 
 export const loadAudioSynth = (ac, description) => {
-    /*
-        // add default values in description
-        getAudioNodeAudioParamNames(node).forEach(apName => {
-            console.log(apName)
-            const defaultValue = node[apName].defaultValue
-            if ((audioParams === undefined) || (audioParams[apName] === undefined)) {
-                description.nodes[nodeIndex].audioParams[apName] = defaultValue
-            }
-        })
-    })
-    */
     const nodes = {}
     description.nodes.forEach((nodeDescription, nodeIndex) => {
         const { type, id, props } = nodeDescription
