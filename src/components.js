@@ -378,7 +378,6 @@ function Synth() {
             descriptionNodes[descriptionNodeIndex].audioParams[cap.audioParamName] = cap.audioParamValue
         }
 
-
     }
     const createAudioNode = type => {
         const descriptionNode = { id: Math.random(), type }

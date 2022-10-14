@@ -16,7 +16,7 @@ export const updateView = (ctx, analyser, dataArray) => {
     let x = 0
     for (let i = 0; i < bufferLength; i++) {
         const v = dataArray[i] / 128
-        const y = v * (canvas.height / 2) 
+        const y = canvas.height - v * (canvas.height / 2) 
 
         if (i === 0) {
             ctx.moveTo(x, y);
@@ -33,7 +33,7 @@ export const updateView = (ctx, analyser, dataArray) => {
 export const Oscilloscope = ac => {
 
     const analyser = ac.createAnalyser();
-    analyser.fftSize = 256 * 8;
+    analyser.fftSize = 256 * 4;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
