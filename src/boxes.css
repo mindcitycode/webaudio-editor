@@ -27,6 +27,9 @@ div.wa-audio-node {
 div.wa-audio-node:hover {
     background-color: rgb(205, 205, 250);
 }
+div.wa-audio-node:hover input {
+    background-color: rgb(205, 205, 250);
+}
 
 div.wa-audio-node.wa-audio-node-selected {
     background-color: rgb(185, 185, 250);
@@ -59,6 +62,11 @@ div.wa-audio-output p {
     text-align: right;
 }
 
+div.wa-audio-input:hover,
+div.wa-audio-param:hover,
+div.wa-audio-output:hover{
+    background-color:  rgb(162, 147, 255);
+}
 canvas.link {
     position: absolute;
     pointer-events: none;
