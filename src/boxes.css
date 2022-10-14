@@ -9,17 +9,24 @@ div.wa-audio-node option,
 div.wa-audio-node select,
 html {
     font-family: monospace;
-    font-size: 11px;
+    font-size: var(--global-font-size)
+}
+
+:root {
+    --node-bg-color: rgb(205, 205, 205);
+    --global-font-size : 11px;
 }
 
 div.wa-audio-node option,
 div.wa-audio-node select,
 div.wa-audio-node {
-    background-color: rgb(205, 205, 205);
+    background-color: var(--node-bg-color);
 }
+
 div.wa-audio-node:hover {
     background-color: rgb(205, 205, 250);
 }
+
 div.wa-audio-node.wa-audio-node-selected {
     background-color: rgb(185, 185, 250);
 }
@@ -27,7 +34,7 @@ div.wa-audio-node.wa-audio-node-selected {
 div.wa-audio-node {
     border: 1px solid black;
     position: absolute;
-    width: 100px;
+   /* width: 100px; */
 }
 
 div.wa-audio-node h1 {
@@ -40,11 +47,19 @@ div.wa-audio-param {
     color: black;
 }
 
+div.wa-audio-param input {
+    background-color:var(--node-bg-color);
+    font-size: var(--global-font-size);
+    border: none;
+    width: 40px;
+}
+
 div.wa-audio-output p {
     text-align: right;
 }
+
 canvas.link {
-    position : absolute;
+    position: absolute;
     pointer-events: none;
     z-index: 999;
 }

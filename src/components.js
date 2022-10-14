@@ -12,8 +12,11 @@ function AudioParamBox(props) {
     const [editMode, setEditMode] = useState(false)
     const name = props.name
     const value = props.value
+    const changedAudioParam = (e) => {
+        console.log(e.target.value)
+    }
     return <div className="wa-audio-param" name={name}>
-        <span onClick={() => props.audioParamClicked(name)}>~{name}</span> <span>{value.toString().slice(0, 8)} </span>
+        <span onClick={() => props.audioParamClicked(name)}>~{name}</span> <input onChange={changedAudioParam} defaultValue={value.toString().slice(0, 8) }/> 
     </div>
 }
 function InputBox(props) {
@@ -298,7 +301,9 @@ function Synth() {
                     connectionManager.removeAudioNode(selectedBoxId)
 
                     // remove live node
-                    liveNodes[selectedBoxId].disconnect()
+                    const liveNode = liveNodes[selectedBoxId]
+                    if (liveNode.stop) liveNode.stop()
+                    liveNode.disconnect()
                     forceUpdate()
                 }
             }
