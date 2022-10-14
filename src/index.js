@@ -1,5 +1,5 @@
 //import 'litegraph.js/src/litegraph.css'
-import { waitAudioContext } from './lib/waitAudioContext'
+import { waitAudioContext } from './waitAudioContext'
 
 import { Bloc } from './bloc.js'
 
