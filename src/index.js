@@ -27,7 +27,7 @@ const go = async () => {
         refreshUIBus.say(synth)
     }, 1000)
     setInterval(() => {
-        //    console.log(synth.description.nodes.map( nd => nd.type ))
+        console.log(synth.description)//.nodes.map( nd => nd.type ))
     }, 1000)
 }
 

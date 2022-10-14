@@ -241,6 +241,24 @@ function AudioNodeAnalyserBox(props) {
 
 export const refreshUIBus = new Bus()
 
+
+const AddBox = props => {
+    const available = [
+        'Oscillator',
+        'Delay',
+        'Destination',
+        'BiquadFilter',
+        'DynamicsCompressor',
+        'ConstantSource',
+        'Panner',
+        'Gain',
+        'Analyser',
+    ]
+    const create = type => () => props.createAudioNode(type)
+    const buttons = available.map(type => <button key={type} onClick={create(type)}>{type} </button>)
+    return buttons
+}
+
 import { addOrRemoveConnection, removeAudioNodeConnections } from './import.js';
 import { rafLoop } from './lib/loop';
 import { updateView } from './audiolib/graphicAnalyzer';
@@ -274,6 +292,12 @@ const ConnectionManager = (synth) => {
     }
 }
 
+
+const SaveBox = (props) => {
+    return <pre>
+    </pre>
+}
+
 function Synth() {
 
     const [descriptionNodes, setDescriptionNodes] = useState([])
@@ -283,7 +307,6 @@ function Synth() {
     const [connectionManager, setConnectionManager] = useState()
     const [selectedBoxId, setSelectedBoxId] = useState()
     const [, forceUpdate] = useReducer(x => x + 1, 0);
-
     useEffect(() => {
         const onSynthChange = (synth) => {
             //console.log('synth updated', value)
@@ -292,7 +315,6 @@ function Synth() {
             setSynthState(synth.state)
             setConnectionManager(ConnectionManager(synth))
             setLiveNodes(synth.nodes)
-
         }
         const onkeypress = e => {
             if (e.repeat) return
@@ -338,13 +360,25 @@ function Synth() {
 
     }
     const changedAudioParam = cap => {
+
+        // set live audionode param
         const liveNode = liveNodes[cap.id]
         liveNode[cap.audioParamName].value = parseFloat(cap.audioParamValue)
+
+        // set description
         const descriptionNodeIndex = descriptionNodes.findIndex(dn => dn.id === cap.id)
         if (descriptionNodeIndex >= 0) {
             descriptionNodes[descriptionNodeIndex].audioParams[cap.audioParamName] = cap.audioParamValue
         }
-        console.log(cap)
+
+
+    }
+    const createAudioNode = type => {
+        const descriptionNode = { id: Math.random(), type }
+        descriptionNodes.push(descriptionNode)
+        setDescriptionNodes(descriptionNodes)
+        positions[ descriptionNode.id ] = [20,20]
+
     }
 
     const boxes = descriptionNodes?.map((node) => {
@@ -375,8 +409,10 @@ function Synth() {
     return (
 
         <>
+            <AddBox createAudioNode={createAudioNode} />
             <pre>{synthState}</pre>
             {boxes}
+
         </>
         // { synth ? (<AudioNodeOscillatorBox />) : (<AudioNodeDelayBox />) }
     )
