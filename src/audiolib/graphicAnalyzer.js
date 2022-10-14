@@ -15,8 +15,8 @@ export const updateView = (ctx, analyser, dataArray) => {
     const sliceWidth = canvas.width / bufferLength
     let x = 0
     for (let i = 0; i < bufferLength; i++) {
-        const v = dataArray[i] / 128.0;
-        const y = v * (canvas.height / 2);
+        const v = dataArray[i] / 128
+        const y = v * (canvas.height / 2) 
 
         if (i === 0) {
             ctx.moveTo(x, y);

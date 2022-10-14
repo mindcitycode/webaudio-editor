@@ -2,7 +2,7 @@ import { getAudioNodeAudioParamNames } from "./inspect"
 
 export const defaultSynthDescription = {
     nodes: [
-        { id: '0', type: 'Oscillator', props: { type: 'sine' }, audioParams: { frequency: 300 } },
+        { id: '0', type: 'Oscillator', props: { type: 'sine' }, audioParams: { frequency: 1 } },
         { id: '1', type: 'Oscillator', props: { type: 'sine' }, audioParams: { frequency: 301 } },
         { id: '2', type: 'Delay', audioparams: { delayTime: { value: 100 } } },
         { id: '3', type: 'Destination' },
@@ -10,14 +10,14 @@ export const defaultSynthDescription = {
         { id: '5', type: 'DynamicsCompressor' },
         { id: '6', type: 'ConstantSource' },
         { id: '7', type: 'Panner' },
-        { id: '8', type: 'Gain' },
+        { id: '8', type: 'Gain', audioParams : { gain : 0} },
         { id: '9', type: 'Analyser', props: { fftsize: 256 * 4 } }
     ],
     connections: [
-        [{ id: '0' }, { id: '1', audioParam: 'detune' }],
-        [{ id: '1' }, { id: '2' }],
-        [{ id: '1' }, { id: '9' }],
+        [{ id: '1' }, { id: '8' }],
         [{ id: '2' }, { id: '3' }],
+        [{ id: '0' }, { id: '8', audioParam : 'gain' }],
+        [{ id: '8' }, { id: '9' }],
     ],
     positions: {
         '0': [10, 40],
