@@ -23,7 +23,7 @@ function mover() {
             if (p) {
                 audioNode = p
                 state = 'moving'
-            }
+            } 
         }
     }
 
