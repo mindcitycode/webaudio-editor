@@ -14,7 +14,7 @@ html {
 
 :root {
     --node-bg-color: rgb(205, 205, 205);
-    --global-font-size : 11px;
+    --global-font-size: 11px;
 }
 
 div.wa-audio-node option,
@@ -34,7 +34,7 @@ div.wa-audio-node.wa-audio-node-selected {
 div.wa-audio-node {
     border: 1px solid black;
     position: absolute;
-   /* width: 100px; */
+    /* width: 100px; */
 }
 
 div.wa-audio-node h1 {
@@ -48,7 +48,7 @@ div.wa-audio-param {
 }
 
 div.wa-audio-param input {
-    background-color:var(--node-bg-color);
+    background-color: var(--node-bg-color);
     font-size: var(--global-font-size);
     border: none;
     width: 40px;

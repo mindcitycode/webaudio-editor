@@ -4,19 +4,21 @@ document.body.appendChild(rootDiv)
 
 import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Bus } from './lib/bus.js'
 import './boxes.css'
 
 
-
 function AudioParamBox(props) {
-    const [editMode, setEditMode] = useState(false)
     const name = props.name
     const value = props.value
     const changedAudioParam = (e) => {
-        console.log(e.target.value)
+        const value = parseFloat(e.target.value)
+        if (!isNaN(value)) {
+            props.changedAudioParam({ audioParamName: name, audioParamValue: value })
+        } 1
     }
     return <div className="wa-audio-param" name={name}>
-        <span onClick={() => props.audioParamClicked(name)}>~{name}</span> <input onChange={changedAudioParam} defaultValue={value.toString().slice(0, 8) }/> 
+        <span onClick={() => props.audioParamClicked(name)}>~{name}</span> <input onChange={changedAudioParam} defaultValue={value.toString().slice(0, 8)} />
     </div>
 }
 function InputBox(props) {
@@ -47,13 +49,15 @@ function AudioNodeOscillatorBox(props) {
     const clicked = () => props.setSelectedBox(props.id)
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
-
+    const changedAudioParam = pv => {
+        props.changedAudioParam({ ...pv, id: props.id })
+    }
     return (
         <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <select>{typeList}</select>
-            <AudioParamBox audioParamClicked={audioParamClicked} name="detune" value={node.audioParams.detune}></AudioParamBox>
-            <AudioParamBox audioParamClicked={audioParamClicked} name="frequency" value={node.audioParams.frequency}></AudioParamBox>
+            <AudioParamBox changedAudioParam={changedAudioParam} audioParamClicked={audioParamClicked} name="detune" value={node.audioParams.detune}></AudioParamBox>
+            <AudioParamBox changedAudioParam={changedAudioParam} audioParamClicked={audioParamClicked} name="frequency" value={node.audioParams.frequency}></AudioParamBox>
             <OutputBox outputClicked={outputClicked} num="1"></OutputBox>
         </div>
     )
@@ -230,7 +234,6 @@ function AudioNodeAnalyserBox(props) {
     )
 }
 
-import { Bus } from './lib/bus.js'
 
 export const refreshUIBus = new Bus()
 
@@ -330,13 +333,21 @@ function Synth() {
         }
 
     }
+    const changedAudioParam = cap => {
+        const liveNode = liveNodes[cap.id]
+        liveNode[cap.audioParamName].value = parseFloat(cap.audioParamValue)
+        const descriptionNodeIndex = descriptionNodes.findIndex( dn => dn.id === cap.id)
+        if (descriptionNodeIndex>=0){
+            descriptionNodes[descriptionNodeIndex].audioParams[ cap.audioParamName ] = cap.audioParamValue
+        }
+    }
 
     const boxes = descriptionNodes?.map((node) => {
         const id = node.id
         const position = positions[id]
         const isSelected = selectedBoxId === id
         if (node.type === 'Oscillator') {
-            return <AudioNodeOscillatorBox isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodeOscillatorBox changedAudioParam={changedAudioParam} isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'Delay') {
             return <AudioNodeDelayBox isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'Destination') {
