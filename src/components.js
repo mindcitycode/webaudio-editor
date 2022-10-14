@@ -83,7 +83,7 @@ function AudioNodeDelayBox(props) {
     return (
         <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
-            <InputBox  inputClicked={inputClicked} num="1"></InputBox>
+            <InputBox inputClicked={inputClicked} num="1"></InputBox>
             <AudioParamBox audioParamClicked={audioParamClicked} name="delayTime" value={props.node.audioParams.delayTime}></AudioParamBox>
             <OutputBox outputClicked={outputClicked} num="1"></OutputBox>
         </div>
@@ -183,38 +183,96 @@ function AudioNodeDestinationBox(props) {
     )
 }
 
-const listeners = []
-export const refreshUI = msg => listeners.forEach(f => f(msg))
-export const addListener = f => listeners.push(f)
-export const removeListener = f => listeners.splice(listeners.indexOf(f), 1)
+import { Bus } from './lib/bus.js'
+
+export const refreshUIBus = new Bus()
+/*
+const refreshUIListeners = []
+export const refreshUI = msg => refreshUIListeners.forEach(f => f(msg))
+export const addListener = f => refreshUIListeners.push(f)
+export const removeListener = f => refreshUIListeners.splice(refreshUIListeners.indexOf(f), 1)
+*/
+
+import { makeAudioConnection, removeAudioConnection } from './import.js';
+
+const ConnectionManager = (synth) => {
+
+    const findConnectionIndex = (from, to) => synth.description.connections.findIndex(existing => {
+        return (existing[0].id === from.id)
+            && (existing[1].id === to.id)
+            && (existing[1].audioParam === to.audioParam)
+    })
+
+
+    console.log('create con man')
+
+
+    let lastInput = undefined
+    let lastOutput = undefined
+    const maybeCreate = () => {
+        console.log('create with', { lastInput, lastOutput, synth })
+        if (lastInput && lastOutput && (lastInput.id !== lastOutput.id)) {
+            const existingIndex = findConnectionIndex(lastOutput, lastInput)
+            if (existingIndex >= 0) {
+                // remove
+                synth.description.connections.splice(existingIndex, 1)
+                removeAudioConnection(synth.nodes, lastOutput, lastInput)
+            } else {
+                // add
+                synth.description.connections.push([lastOutput, lastInput])
+                makeAudioConnection(synth.nodes, lastOutput, lastInput)
+            }
+            lastInput = undefined
+            lastOutput = undefined
+        }
+        console.log(synth.description.connections)
+    }
+    const inputClick = (v) => {
+        lastInput = v
+        maybeCreate()
+    }
+    const outputClick = (v) => {
+        lastOutput = v
+        maybeCreate()
+    }
+    return {
+        inputClick,
+        outputClick
+    }
+}
 
 function Synth() {
 
     const [descriptionNodes, setDescriptionNodes] = useState([])
     const [positions, setPositions] = useState({})
     const [synthState, setSynthState] = useState()
+    const [connectionManager, setConnectionManager] = useState()
 
     useEffect(() => {
         function onSynthChange(value) {
-            console.log('synth updated', value)
+            //console.log('synth updated', value)
             setDescriptionNodes(value.description.nodes)
             setPositions(value.description.positions)
             setSynthState(value.state)
+            setConnectionManager(ConnectionManager(value))
         }
-        addListener(onSynthChange)
+        refreshUIBus.addListener(onSynthChange)
         return function cleanup() {
-            removeListener(onSynthChange)
+            refreshUIBus.removeListener(onSynthChange)
         }
     })
 
     const audioParamClicked = (v) => {
         console.log('you clac ap ', v)
+        connectionManager?.inputClick(v)
     }
     const inputClicked = (v) => {
         console.log('you clac input', v)
+        connectionManager?.inputClick(v)
     }
     const outputClicked = v => {
         console.log('you clac output', v)
+        connectionManager?.outputClick(v)
     }
 
     const boxes = descriptionNodes?.map((node) => {
@@ -223,7 +281,7 @@ function Synth() {
         if (node.type === 'Oscillator') {
             return <AudioNodeOscillatorBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'Delay') {
-            return <AudioNodeDelayBox outputClicked={outputClicked} inputClicked={inputClicked}  audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodeDelayBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'Destination') {
             return <AudioNodeDestinationBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'BiquadFilter') {
