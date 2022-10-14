@@ -1,5 +1,5 @@
 import { rafLoop } from './lib/loop.js'
-import { getScrollPosition } from './dom.js'
+import { getScrollPosition } from './lib/dom.js'
 
 export const getLinks = synth => () => {
 

@@ -1,4 +1,4 @@
-import { getScrollPosition } from './dom.js'
+import { getScrollPosition } from './lib/dom.js'
 
 function mover() {
 
