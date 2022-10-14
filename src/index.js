@@ -1,5 +1,5 @@
 //import 'litegraph.js/src/litegraph.css'
-import { waitAudioContext } from './waitAudioContext'
+import { waitAudioContext } from './audiolib/waitAudioContext'
 
 import { Bloc } from './bloc.js'
 
@@ -9,6 +9,16 @@ import './components.js'
 import { loadAudioSynth, defaultSynthDescription, startAudioSynth, stopAudioSynth } from './import.js'
 import { refreshUIBus } from './components'
 import { ConnectionCanvas, getLinks } from './connectionsCanvas.js'
+import { registerKeyboard } from './lib/keyboard'
+
+
+const onkeypress = e => {
+    if (e.repeat) return
+    console.log(document.body.querySelector(":hover"))
+
+}
+document.body.addEventListener('keydown', onkeypress)
+
 
 const go = async () => {
     const ac = await waitAudioContext()
@@ -17,9 +27,9 @@ const go = async () => {
     refreshUIBus.say(synth)
     startAudioSynth(synth)
     refreshUIBus.say(synth)
-    
+
     setTimeout(() => {
-//        stopAudioSynth(synth)
+        //        stopAudioSynth(synth)
         refreshUIBus.say(synth)
     }, 1000)
     /*setInterval(() => {
