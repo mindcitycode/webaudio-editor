@@ -193,16 +193,9 @@ export const addListener = f => refreshUIListeners.push(f)
 export const removeListener = f => refreshUIListeners.splice(refreshUIListeners.indexOf(f), 1)
 */
 
-import { makeAudioConnection, removeAudioConnection } from './import.js';
+import { addOrRemoveConnection } from './import.js';
 
 const ConnectionManager = (synth) => {
-
-    const findConnectionIndex = (from, to) => synth.description.connections.findIndex(existing => {
-        return (existing[0].id === from.id)
-            && (existing[1].id === to.id)
-            && (existing[1].audioParam === to.audioParam)
-    })
-
 
     console.log('create con man')
 
@@ -211,8 +204,16 @@ const ConnectionManager = (synth) => {
     let lastOutput = undefined
     const maybeCreate = () => {
         console.log('create with', { lastInput, lastOutput, synth })
+
+        const r = addOrRemoveConnection(synth, lastOutput, lastInput)
+        if (r) {
+            lastInput = undefined
+            lastOutput = undefined
+        }
+        /*
         if (lastInput && lastOutput && (lastInput.id !== lastOutput.id)) {
-            const existingIndex = findConnectionIndex(lastOutput, lastInput)
+  
+            const existingIndex = findConnectionIndex(synth.description.connections, lastOutput, lastInput)
             if (existingIndex >= 0) {
                 // remove
                 synth.description.connections.splice(existingIndex, 1)
@@ -226,6 +227,7 @@ const ConnectionManager = (synth) => {
             lastOutput = undefined
         }
         console.log(synth.description.connections)
+        */
     }
     const inputClick = (v) => {
         lastInput = v

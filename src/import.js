@@ -99,20 +99,35 @@ export const loadAudioSynth = (ac, description) => {
     })
 
     description.connections.forEach(([from, to]) => {
-        makeAudioConnection(nodes,from,to)
-        /*
-        const fromId = from.id
-        const toId = to.id
-        if (to.audioParam) {
-            nodes[fromId].connect(nodes[toId][to.audioParam])
-        } else {
-            nodes[fromId].connect(nodes[toId])
-        }*/
+        makeAudioConnection(nodes, from, to)
     })
 
     const synth = { description, nodes, state: 'ready' }
     console.log(synth)
     return synth
+}
+
+const findConnectionIndex = (connections, from, to) => connections.findIndex(existing => {
+    return (existing[0].id === from.id)
+        && (existing[1].id === to.id)
+        && (existing[1].audioParam === to.audioParam)
+})
+export const addOrRemoveConnection = (synth, lastOutput, lastInput) => {
+    if (lastInput && lastOutput && (lastInput.id !== lastOutput.id)) {
+        const existingIndex = findConnectionIndex(synth.description.connections, lastOutput, lastInput)
+        if (existingIndex >= 0) {
+            // remove
+            synth.description.connections.splice(existingIndex, 1)
+            removeAudioConnection(synth.nodes, lastOutput, lastInput)
+            return 'removed'
+        } else {
+            // add
+            synth.description.connections.push([lastOutput, lastInput])
+            makeAudioConnection(synth.nodes, lastOutput, lastInput)
+            return 'added'
+        }
+    }
+    return undefined
 }
 
 export const makeAudioConnection = (nodes, from, to) => {
@@ -124,7 +139,7 @@ export const makeAudioConnection = (nodes, from, to) => {
         nodes[fromId].connect(nodes[toId])
     }
 }
-export const removeAudioConnection = (nodes,from,to) => {
+export const removeAudioConnection = (nodes, from, to) => {
     const fromId = from.id
     const toId = to.id
     if (to.audioParam) {
