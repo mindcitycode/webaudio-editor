@@ -12,12 +12,6 @@ import { ConnectionCanvas, getLinks } from './connectionsCanvas.js'
 import { registerKeyboard } from './lib/keyboard'
 
 
-const onkeypress = e => {
-    if (e.repeat) return
-    console.log(document.body.querySelector(":hover"))
-
-}
-document.body.addEventListener('keydown', onkeypress)
 
 
 const go = async () => {
@@ -32,9 +26,9 @@ const go = async () => {
         //        stopAudioSynth(synth)
         refreshUIBus.say(synth)
     }, 1000)
-    /*setInterval(() => {
-        refreshUIBus.say(synth)
-    }, 1000)*/
+    setInterval(() => {
+        //    console.log(synth.description.nodes.map( nd => nd.type ))
+    }, 1000)
 }
 
 const unused = async () => {

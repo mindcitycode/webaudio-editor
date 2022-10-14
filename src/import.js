@@ -10,14 +10,15 @@ export const defaultSynthDescription = {
         { id: '5', type: 'DynamicsCompressor' },
         { id: '6', type: 'ConstantSource' },
         { id: '7', type: 'Panner' },
-        { id: '8', type: 'Gain', audioParams : { gain : 0} },
+        { id: '8', type: 'Gain', audioParams: { gain: 0 } },
         { id: '9', type: 'Analyser', props: { fftsize: 256 * 4 } }
     ],
     connections: [
         [{ id: '1' }, { id: '8' }],
         [{ id: '2' }, { id: '3' }],
-        [{ id: '0' }, { id: '8', audioParam : 'gain' }],
+        [{ id: '0' }, { id: '8', audioParam: 'gain' }],
         [{ id: '8' }, { id: '9' }],
+        [{ id: '9' }, { id: '3' }],
     ],
     positions: {
         '0': [50, 100],
@@ -140,7 +141,11 @@ export const removeAudioConnection = (nodes, from, to) => {
     }
 
 }
-
+export const removeAudioNodeConnections = (synth, id) => {
+    synth.description.connections = synth.description.connections.filter(([from, to]) => {
+        return ((from.id !== id) && (to.id !== id))
+    })
+}
 export const startAudioSynth = (synth) => {
     for (let [id, node] of Object.entries(synth.nodes)) {
         if (node.start) node.start()

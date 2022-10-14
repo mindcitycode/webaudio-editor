@@ -20,6 +20,9 @@ div.wa-audio-node {
 div.wa-audio-node:hover {
     background-color: rgb(205, 205, 250);
 }
+div.wa-audio-node.wa-audio-node-selected {
+    background-color: rgb(185, 185, 250);
+}
 
 div.wa-audio-node {
     border: 1px solid black;

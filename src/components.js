@@ -2,7 +2,7 @@ const rootDiv = document.createElement('div')
 rootDiv.id = 'root'
 document.body.appendChild(rootDiv)
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { createRoot } from 'react-dom/client';
 import './boxes.css'
 
@@ -41,11 +41,12 @@ function AudioNodeOscillatorBox(props) {
         <option key={type}> {type}</option>
     );
 
+    const clicked = () => props.setSelectedBox(props.id)
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
 
     return (
-        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
+        <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <select>{typeList}</select>
             <AudioParamBox audioParamClicked={audioParamClicked} name="detune" value={node.audioParams.detune}></AudioParamBox>
@@ -61,10 +62,11 @@ function AudioNodeGainBox(props) {
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const inputClicked = num => props.inputClicked({ id: props.id, num })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
+    const clicked = () => props.setSelectedBox(props.id)
 
     const audioNodeName = "gain"
     return (
-        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
+        <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox inputClicked={inputClicked} num="1"></InputBox>
             <AudioParamBox audioParamClicked={audioParamClicked} name="gain" value={props.node.audioParams.gain}></AudioParamBox>
@@ -78,10 +80,11 @@ function AudioNodeDelayBox(props) {
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
     const inputClicked = num => props.inputClicked({ id: props.id, num })
+    const clicked = () => props.setSelectedBox(props.id)
 
     const audioNodeName = "delay"
     return (
-        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
+        <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox inputClicked={inputClicked} num="1"></InputBox>
             <AudioParamBox audioParamClicked={audioParamClicked} name="delayTime" value={props.node.audioParams.delayTime}></AudioParamBox>
@@ -95,10 +98,11 @@ function AudioNodeBiquadFilterBox(props) {
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const inputClicked = num => props.inputClicked({ id: props.id, num })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
+    const clicked = () => props.setSelectedBox(props.id)
 
     const audioNodeName = "biquad"
     return (
-        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
+        <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox inputClicked={inputClicked} num="1"></InputBox>
             <AudioParamBox audioParamClicked={audioParamClicked} name="frequency" value={props.node.audioParams.frequency}></AudioParamBox>
@@ -115,10 +119,11 @@ function AudioNodeDynamicsCompressorBox(props) {
     const inputClicked = num => props.inputClicked({ id: props.id, num })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
 
+    const clicked = () => props.setSelectedBox(props.id)
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const audioNodeName = "compressor"
     return (
-        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
+        <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox inputClicked={inputClicked} num="1"></InputBox>
             <AudioParamBox audioParamClicked={audioParamClicked} name="threshold" value={props.node.audioParams.threshold}></AudioParamBox>
@@ -135,10 +140,11 @@ function AudioNodeConstantSourceBox(props) {
 
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
+    const clicked = () => props.setSelectedBox(props.id)
 
     const audioNodeName = "constant"
     return (
-        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
+        <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <AudioParamBox audioParamClicked={audioParamClicked} name="offset" value={props.node.audioParams.offset}></AudioParamBox>
             <OutputBox outputClicked={outputClicked} num="1"></OutputBox>
@@ -150,11 +156,12 @@ function AudioNodePannerBox(props) {
 
     const inputClicked = num => props.inputClicked({ id: props.id, num })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
+    const clicked = () => props.setSelectedBox(props.id)
 
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const audioNodeName = "panner"
     return (
-        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
+        <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox inputClicked={inputClicked} num="1"></InputBox>
             <AudioParamBox audioParamClicked={audioParamClicked} name="positionX" value={props.node.audioParams.positionX}></AudioParamBox>
@@ -173,38 +180,21 @@ function AudioNodeDestinationBox(props) {
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const inputClicked = num => props.inputClicked({ id: props.id, num })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
+    const clicked = () => props.setSelectedBox(props.id)
 
     const audioNodeName = "destination"
     return (
-        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
+        <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox inputClicked={inputClicked} num="1"></InputBox>
         </div>
     )
 }
-/*
-function AudioNodeGainBox(props) {
-    const [left, top] = props.position.map(x => x + 'px')
-
-    const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
-    const inputClicked = num => props.inputClicked({ id: props.id, num })
-    const outputClicked = num => props.outputClicked({ id: props.id, num })
-
-    const audioNodeName = "gain"
-    return (
-        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
-            <h1>{audioNodeName}</h1>
-            <InputBox inputClicked={inputClicked} num="1"></InputBox>
-            <AudioParamBox audioParamClicked={audioParamClicked} name="gain" value={props.node.audioParams.gain}></AudioParamBox>
-            <OutputBox outputClicked={outputClicked} num="1"></OutputBox>
-        </div>
-    )
-}*/
+const selectedClass = props => props.isSelected ? "wa-audio-node-selected" : ""
 
 function AudioNodeAnalyserBox(props) {
     const [left, top] = props.position.map(x => x + 'px')
 
-    const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const inputClicked = num => props.inputClicked({ id: props.id, num })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
 
@@ -224,14 +214,15 @@ function AudioNodeAnalyserBox(props) {
             loopState.halt = true
         }
     })
-
+    const clicked = () => props.setSelectedBox(props.id)
     const audioNodeName = "analyser"
     return (
-        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
+        <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
             <InputBox inputClicked={inputClicked} num="1"></InputBox>
             <canvas ref={canvasRef} width="100" height="100" />
             <OutputBox outputClicked={outputClicked} num="1"></OutputBox>
+            <pre>{props.isSelected ? "OUI" : "NON"}</pre>
         </div>
     )
 }
@@ -240,17 +231,15 @@ import { Bus } from './lib/bus.js'
 
 export const refreshUIBus = new Bus()
 
-import { addOrRemoveConnection } from './import.js';
+import { addOrRemoveConnection, removeAudioNodeConnections } from './import.js';
 import { rafLoop } from './lib/loop';
 import { updateView } from './audiolib/graphicAnalyzer';
 
-const ConnectionClickManager = (synth) => {
+const ConnectionManager = (synth) => {
 
     let lastInput = undefined
     let lastOutput = undefined
     const maybeCreate = () => {
-        console.log('create with', { lastInput, lastOutput, synth })
-
         const r = addOrRemoveConnection(synth, lastOutput, lastInput)
         if (r) {
             lastInput = undefined
@@ -265,9 +254,13 @@ const ConnectionClickManager = (synth) => {
         lastOutput = v
         maybeCreate()
     }
+    const removeAudioNode = id => {
+        removeAudioNodeConnections(synth, id)
+    }
     return {
         inputClick,
-        outputClick
+        outputClick,
+        removeAudioNode
     }
 }
 
@@ -278,64 +271,86 @@ function Synth() {
     const [positions, setPositions] = useState({})
     const [synthState, setSynthState] = useState()
     const [connectionManager, setConnectionManager] = useState()
+    const [selectedBoxId, setSelectedBoxId] = useState()
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     useEffect(() => {
-        function onSynthChange(value) {
+        const onSynthChange = (synth) => {
             //console.log('synth updated', value)
-            setDescriptionNodes(value.description.nodes)
-            setPositions(value.description.positions)
-            setSynthState(value.state)
-            setConnectionManager(ConnectionClickManager(value))
-            setLiveNodes(value.nodes)
+            setDescriptionNodes(synth.description.nodes)
+            setPositions(synth.description.positions)
+            setSynthState(synth.state)
+            setConnectionManager(ConnectionManager(synth))
+            setLiveNodes(synth.nodes)
+
         }
+        const onkeypress = e => {
+            if (e.repeat) return
+            if (e.code === 'Delete') {
+                const descriptionNodeIndex = descriptionNodes.findIndex(descriptionNode => descriptionNode.id === selectedBoxId)
+                if (descriptionNodeIndex >= 0) {
+
+                    // remove from description nodes
+                    descriptionNodes.splice(descriptionNodeIndex, 1)
+                    setDescriptionNodes(descriptionNodes)
+
+                    // remove from description connections
+                    connectionManager.removeAudioNode(selectedBoxId)
+
+                    // remove live node
+                    liveNodes[selectedBoxId].disconnect()
+                    forceUpdate()
+                }
+            }
+        }
+        document.body.addEventListener('keydown', onkeypress)
         refreshUIBus.addListener(onSynthChange)
+
         return function cleanup() {
             refreshUIBus.removeListener(onSynthChange)
+            document.body.removeEventListener('keydown', onkeypress)
         }
+
     })
 
-    const audioParamClicked = (v) => {
-        console.log('you clac ap ', v)
-        connectionManager?.inputClick(v)
-    }
-    const inputClicked = (v) => {
-        console.log('you clac input', v)
-        connectionManager?.inputClick(v)
-    }
-    const outputClicked = v => {
-        console.log('you clac output', v)
-        connectionManager?.outputClick(v)
+    const audioParamClicked = v => connectionManager?.inputClick(v)
+    const inputClicked = v => connectionManager?.inputClick(v)
+    const outputClicked = v => connectionManager?.outputClick(v)
+
+    const setSelectedBox = id => {
+        if (selectedBoxId === id) {
+            setSelectedBoxId(undefined)
+        } else {
+            setSelectedBoxId(id)
+        }
+
     }
 
     const boxes = descriptionNodes?.map((node) => {
         const id = node.id
         const position = positions[id]
+        const isSelected = selectedBoxId === id
         if (node.type === 'Oscillator') {
-            return <AudioNodeOscillatorBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodeOscillatorBox isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'Delay') {
-            return <AudioNodeDelayBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodeDelayBox isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'Destination') {
-            return <AudioNodeDestinationBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodeDestinationBox isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'BiquadFilter') {
-            return <AudioNodeBiquadFilterBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodeBiquadFilterBox isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'DynamicsCompressor') {
-            return <AudioNodeDynamicsCompressorBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodeDynamicsCompressorBox isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'ConstantSource') {
-            return <AudioNodeConstantSourceBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodeConstantSourceBox isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'Panner') {
-            return <AudioNodePannerBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodePannerBox isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'Gain') {
-            return <AudioNodeGainBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodeGainBox isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'Analyser') {
-            return <AudioNodeAnalyserBox liveNode={liveNodes[id]} outputClicked={outputClicked} inputClicked={inputClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodeAnalyserBox isSelected={isSelected} setSelectedBox={setSelectedBox} liveNode={liveNodes[id]} outputClicked={outputClicked} inputClicked={inputClicked} key={id} id={id} position={position} node={node} />
         }
     })
 
-    /*    const description = synth.description
-        updater.onupdate = () => {
-    
-        }
-      */
     return (
 
         <>
@@ -344,11 +359,6 @@ function Synth() {
         </>
         // { synth ? (<AudioNodeOscillatorBox />) : (<AudioNodeDelayBox />) }
     )
-    /*.description?.nodes.forEach( node =>
-    <AudioNodeOscillatorBox/>
-*/
-    //<><AudioNodeOscillatorBox /><AudioNodeDelayBox /><AudioNodeGainBox /><AudioNodeBiquadFilterBox /><AudioNodeDynamicsCompressorBox /><AudioNodeDynamicsConstantSourceBox /><AudioNodePannerBox /><AudioNodeDestinationBox /></>
-    //  )
 }
 const root = createRoot(document.getElementById('root'));
 root.render(<Synth />)
