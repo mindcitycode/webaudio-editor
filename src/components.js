@@ -262,6 +262,7 @@ const AddBox = props => {
 import { addOrRemoveConnection, loadAudioNode, removeAudioNodeConnections } from './import.js';
 import { rafLoop } from './lib/loop';
 import { updateView } from './audiolib/graphicAnalyzer';
+import { getScrollPosition } from './lib/dom.js';
 
 const ConnectionManager = (synth) => {
 
@@ -286,7 +287,7 @@ const ConnectionManager = (synth) => {
         removeAudioNodeConnections(synth, id)
     }
     const getConnections = () => {
-        return synth.connections
+        return synth.description.connections
     }
     return {
         inputClick,
@@ -383,20 +384,38 @@ function Synth() {
         const descriptionNode = { id: Math.random(), type }
         descriptionNodes.push(descriptionNode)
         setDescriptionNodes(descriptionNodes)
-        positions[descriptionNode.id] = [50, 50]
+        const scrollPosition = getScrollPosition()
+        positions[descriptionNode.id] = [scrollPosition.x + 150, scrollPosition.y + 50]
         loadAudioNode(liveNodes, descriptionNode)
         forceUpdate()
     }
     const copyToClipBoard = async () => {
 
+        // collect positions
+        const positions = {}
+        descriptionNodes.map(descriptionNode => descriptionNode.id).forEach(id => {
+            // method1
+            const domNode = document.getElementById(id)
+            const rect = domNode.getBoundingClientRect()
+            const scroll = getScrollPosition()
+            const rectx = rect.x + scroll.x
+            const recty = rect.y + scroll.y
+            
+            positions[id.toString()] = [rectx,recty]
+            // method2
+            /*
+            const x = parseFloat(domNode.style.left)
+            const y = parseFloat(domNode.style.top)
+            return [x,y]
+            */
+        })
         const savable = {
-            nodes : descriptionNodes,
-            connections : connectionManager.getConnections(),
-            positions : positions
+            nodes: descriptionNodes,
+            connections: connectionManager.getConnections(),
+            positions: positions
         }
-
+        console.log('C',savable.connections)
         const done = await navigator.clipboard.writeText(JSON.stringify(savable))
-        console.log('copied!')
     }
     const boxes = descriptionNodes?.map((node) => {
         const id = node.id
