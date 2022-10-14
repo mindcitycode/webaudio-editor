@@ -63,3 +63,19 @@ canvas.link {
     pointer-events: none;
     z-index: 999;
 }
+
+div.create-toolbar {
+    z-index: 999;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: rgba(200,200,200,0.5);
+    width: 100%;
+}
+
+
+div.create-toolbar button {
+    border: solid 1px black;
+    padding: 0.2em;
+    margin: 0.2em;
+}

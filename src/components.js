@@ -256,10 +256,10 @@ const AddBox = props => {
     ]
     const create = type => () => props.createAudioNode(type)
     const buttons = available.map(type => <button key={type} onClick={create(type)}>{type} </button>)
-    return buttons
+    return <div className='create-toolbar'>{buttons}</div>
 }
 
-import { addOrRemoveConnection, removeAudioNodeConnections } from './import.js';
+import { addOrRemoveConnection, loadAudioNode, removeAudioNodeConnections } from './import.js';
 import { rafLoop } from './lib/loop';
 import { updateView } from './audiolib/graphicAnalyzer';
 
@@ -377,8 +377,9 @@ function Synth() {
         const descriptionNode = { id: Math.random(), type }
         descriptionNodes.push(descriptionNode)
         setDescriptionNodes(descriptionNodes)
-        positions[ descriptionNode.id ] = [20,20]
-
+        positions[descriptionNode.id] = [50, 50]
+        loadAudioNode(liveNodes, descriptionNode)
+        forceUpdate()
     }
 
     const boxes = descriptionNodes?.map((node) => {

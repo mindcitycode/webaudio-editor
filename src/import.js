@@ -59,8 +59,43 @@ export const removeAudioNode = (ac, synth, nodeId) => {
 
 
 }
+///////////////// NOoooooooooooo!
+let AC
+export const loadAudioNode = (liveNodes, nodeDescription) => {
+    ///////////////// NOoooooooooooo!
+    const ac = AC
+    const { type, id, props } = nodeDescription
 
+    if (nodeDescription.audioParams === undefined) nodeDescription.audioParams = {}
+    const { audioParams } = nodeDescription
+
+    let node
+    if (type === 'Destination') {
+        node = ac.destination
+    } else {
+        const fn = `create${type}`
+        node = ac[fn]()
+
+        if (props) {
+            for (let [name, value] of Object.entries(props)) {
+                node[name] = value
+            }
+        }
+        getAudioNodeAudioParamNames(node).forEach(apName => {
+            if (audioParams[apName] !== undefined) {
+                node[apName].value = audioParams[apName]
+            } else {
+                audioParams[apName] = node[apName].defaultValue
+            }
+        })
+    }
+    if (node.start) node.start()
+    liveNodes[id] = node
+
+}
 export const loadAudioSynth = (ac, description) => {
+    ///////////////// NOoooooooooooo!
+    AC = ac
     const nodes = {}
     description.nodes.forEach((nodeDescription, nodeIndex) => {
         const { type, id, props } = nodeDescription
