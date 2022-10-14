@@ -191,7 +191,7 @@ function AudioNodeDestinationBox(props) {
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const inputClicked = num => props.inputClicked({ id: props.id, num })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
-    const clicked = () => props.setSelectedBox(props.id)
+    const clicked = () => { } // props.setSelectedBox(props.id) CANNOT REMOVE
     const changedAudioParam = pv => props.changedAudioParam({ ...pv, id: props.id })
 
     const audioNodeName = "destination"
@@ -285,17 +285,24 @@ const ConnectionManager = (synth) => {
     const removeAudioNode = id => {
         removeAudioNodeConnections(synth, id)
     }
+    const getConnections = () => {
+        return synth.connections
+    }
     return {
         inputClick,
         outputClick,
-        removeAudioNode
+        removeAudioNode,
+        getConnections
     }
 }
 
 
 const SaveBox = (props) => {
-    return <pre>
-    </pre>
+    return <div className='file-toolbar'>
+        <button className='save-to-clipboard-button' onClick={props.copyToClipBoard}>
+            copy to clipboard
+        </button>
+    </div>
 }
 
 function Synth() {
@@ -381,7 +388,17 @@ function Synth() {
         loadAudioNode(liveNodes, descriptionNode)
         forceUpdate()
     }
+    const copyToClipBoard = async () => {
 
+        const savable = {
+            nodes : descriptionNodes,
+            connections : connectionManager.getConnections(),
+            positions : positions
+        }
+
+        const done = await navigator.clipboard.writeText(JSON.stringify(savable))
+        console.log('copied!')
+    }
     const boxes = descriptionNodes?.map((node) => {
         const id = node.id
         const position = positions[id]
@@ -411,6 +428,7 @@ function Synth() {
 
         <>
             <AddBox createAudioNode={createAudioNode} />
+            <SaveBox copyToClipBoard={copyToClipBoard} />
             <pre>{synthState}</pre>
             {boxes}
 

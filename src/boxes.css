@@ -15,6 +15,7 @@ html {
 :root {
     --node-bg-color: rgb(205, 205, 205);
     --global-font-size: 11px;
+    --toolbar-background-color : rgba(200,200,200,0.95);
 }
 
 div.wa-audio-node option,
@@ -66,15 +67,24 @@ canvas.link {
 
 div.create-toolbar {
     z-index: 999;
-    position: absolute;
+    position: fixed;
     top: 0px;
     right: 0px;
-    background-color: rgba(200,200,200,0.5);
+    background-color: var(--toolbar-background-color);
+    width: 100%;
+}
+div.file-toolbar {
+    z-index: 999;
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    background-color: var(--toolbar-background-color);
     width: 100%;
 }
 
 
-div.create-toolbar button {
+
+/*div.create-toolbar*/ button {
     border: solid 1px black;
     padding: 0.2em;
     margin: 0.2em;
