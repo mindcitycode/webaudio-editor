@@ -16,6 +16,7 @@ html {
     --node-bg-color: rgb(205, 205, 205);
     --global-font-size: 11px;
     --toolbar-background-color : rgba(200,200,200,0.95);
+    --global-hover-color :  rgb(205, 205, 250)
 }
 
 div.wa-audio-node option,
@@ -24,11 +25,9 @@ div.wa-audio-node {
     background-color: var(--node-bg-color);
 }
 
-div.wa-audio-node:hover {
-    background-color: rgb(205, 205, 250);
-}
+div.wa-audio-node:hover,
 div.wa-audio-node:hover input {
-    background-color: rgb(205, 205, 250);
+    background-color: var(--global-hover-color)
 }
 
 div.wa-audio-node.wa-audio-node-selected {
