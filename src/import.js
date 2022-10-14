@@ -4,7 +4,7 @@ import { getAudioNodeAudioParamNames } from "./inspect"
 export const defaultSynthDescription = {
     nodes: [
         { id: '0', type: 'Oscillator', props: { type: 'sine' }, audioParams: { frequency: 1 } },
-        { id: '1', type: 'Oscillator', props: { type: 'sine' }, audioParams: { frequency: 301 } },
+        { id: '1', type: 'Oscillator', props: { type: 'square' }, audioParams: { frequency: 301 } },
         { id: '2', type: 'Delay', audioparams: { delayTime: { value: 100 } } },
         { id: '3', type: 'Destination' },
         { id: '4', type: 'BiquadFilter' },

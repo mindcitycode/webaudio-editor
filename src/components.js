@@ -50,11 +50,11 @@ function AudioNodeOscillatorBox(props) {
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
     const changedAudioParam = pv => props.changedAudioParam({ ...pv, id: props.id })
-    const changedStandardParam = standardParamName => e => props.changedStandardParam({ id : props.id, standardParamName, value : e.target.value })
+    const changedStandardParam = standardParamName => e => props.changedStandardParam({ id: props.id, standardParamName, value: e.target.value })
     return (
         <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
-            <select onChange={changedStandardParam('type')}>{typeList}</select>
+            <select onChange={changedStandardParam('type')} value={node.props.type}   >{typeList}</select>
             <AudioParamBox changedAudioParam={changedAudioParam} audioParamClicked={audioParamClicked} name="detune" value={node.audioParams.detune}></AudioParamBox>
             <AudioParamBox changedAudioParam={changedAudioParam} audioParamClicked={audioParamClicked} name="frequency" value={node.audioParams.frequency}></AudioParamBox>
             <OutputBox outputClicked={outputClicked} num="1"></OutputBox>
@@ -401,8 +401,8 @@ function Synth() {
             const scroll = getScrollPosition()
             const rectx = rect.x + scroll.x
             const recty = rect.y + scroll.y
-            
-            positions[id.toString()] = [rectx,recty]
+
+            positions[id.toString()] = [rectx, recty]
             // method2
             /*
             const x = parseFloat(domNode.style.left)
@@ -415,19 +415,19 @@ function Synth() {
             connections: connectionManager.getConnections(),
             positions: positions
         }
-        console.log('C',savable.connections)
+        console.log('C', savable.connections)
         const done = await navigator.clipboard.writeText(JSON.stringify(savable))
     }
     const changedStandardParam = p => {
-        const {id,standardParamName,value} = p
+        const { id, standardParamName, value } = p
         // description 
-        const descriptionNode = descriptionNodes.find( descriptionNode => descriptionNode.id === id )
+        const descriptionNode = descriptionNodes.find(descriptionNode => descriptionNode.id === id)
         if (descriptionNode) descriptionNode.props[standardParamName] = value
         // live node
         const liveNode = liveNodes[id]
         if (liveNode) liveNode[standardParamName] = value
 
-        console.log('changed standard',p)
+        console.log('changed standard', p)
     }
     const boxes = descriptionNodes?.map((node) => {
         const id = node.id
