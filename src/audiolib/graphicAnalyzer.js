@@ -1,16 +1,18 @@
-import { rafLoop } from "./lib/loop"
+import { rafLoop } from "../lib/loop"
 
 export const updateView = (ctx, analyser, dataArray) => {
-
+    const canvas = ctx.canvas
+    const bufferLength = dataArray.length 
     analyser.getByteTimeDomainData(dataArray)
+    
     ctx.fillStyle = 'rgba(128,128,128,0.5)'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
-    ctx.lineWidth = 4
+    
+    ctx.lineWidth = 1
     ctx.strokeStyle = 'black'
+
     ctx.beginPath()
-
     const sliceWidth = canvas.width / bufferLength
-
     let x = 0
     for (let i = 0; i < bufferLength; i++) {
         const v = dataArray[i] / 128.0;

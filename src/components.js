@@ -2,7 +2,7 @@ const rootDiv = document.createElement('div')
 rootDiv.id = 'root'
 document.body.appendChild(rootDiv)
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import './boxes.css'
 
@@ -182,18 +182,67 @@ function AudioNodeDestinationBox(props) {
         </div>
     )
 }
+/*
+function AudioNodeGainBox(props) {
+    const [left, top] = props.position.map(x => x + 'px')
+
+    const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
+    const inputClicked = num => props.inputClicked({ id: props.id, num })
+    const outputClicked = num => props.outputClicked({ id: props.id, num })
+
+    const audioNodeName = "gain"
+    return (
+        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
+            <h1>{audioNodeName}</h1>
+            <InputBox inputClicked={inputClicked} num="1"></InputBox>
+            <AudioParamBox audioParamClicked={audioParamClicked} name="gain" value={props.node.audioParams.gain}></AudioParamBox>
+            <OutputBox outputClicked={outputClicked} num="1"></OutputBox>
+        </div>
+    )
+}*/
+
+function AudioNodeAnalyserBox(props) {
+    const [left, top] = props.position.map(x => x + 'px')
+
+    const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
+    const inputClicked = num => props.inputClicked({ id: props.id, num })
+    const outputClicked = num => props.outputClicked({ id: props.id, num })
+
+    const canvasRef = useRef(null)
+
+    useEffect(() => {
+        const canvas = canvasRef.current
+        const analyserNode = props.liveNode
+        const bufferLength = analyserNode.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        const ctx = canvas.getContext('2d')
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        const loopState = rafLoop((dt, t) => {
+            updateView(ctx, analyserNode, dataArray)
+        })
+        return () => {
+            loopState.halt = true
+        }
+    })
+
+    const audioNodeName = "analyser"
+    return (
+        <div className="wa-audio-node movable" id={props.id} style={{ left, top }}>
+            <h1>{audioNodeName}</h1>
+            <InputBox inputClicked={inputClicked} num="1"></InputBox>
+            <canvas ref={canvasRef} width="100" height="100" />
+            <OutputBox outputClicked={outputClicked} num="1"></OutputBox>
+        </div>
+    )
+}
 
 import { Bus } from './lib/bus.js'
 
 export const refreshUIBus = new Bus()
-/*
-const refreshUIListeners = []
-export const refreshUI = msg => refreshUIListeners.forEach(f => f(msg))
-export const addListener = f => refreshUIListeners.push(f)
-export const removeListener = f => refreshUIListeners.splice(refreshUIListeners.indexOf(f), 1)
-*/
 
 import { addOrRemoveConnection } from './import.js';
+import { rafLoop } from './lib/loop';
+import { updateView } from './audiolib/graphicAnalyzer';
 
 const ConnectionManager = (synth) => {
 
@@ -210,24 +259,6 @@ const ConnectionManager = (synth) => {
             lastInput = undefined
             lastOutput = undefined
         }
-        /*
-        if (lastInput && lastOutput && (lastInput.id !== lastOutput.id)) {
-  
-            const existingIndex = findConnectionIndex(synth.description.connections, lastOutput, lastInput)
-            if (existingIndex >= 0) {
-                // remove
-                synth.description.connections.splice(existingIndex, 1)
-                removeAudioConnection(synth.nodes, lastOutput, lastInput)
-            } else {
-                // add
-                synth.description.connections.push([lastOutput, lastInput])
-                makeAudioConnection(synth.nodes, lastOutput, lastInput)
-            }
-            lastInput = undefined
-            lastOutput = undefined
-        }
-        console.log(synth.description.connections)
-        */
     }
     const inputClick = (v) => {
         lastInput = v
@@ -246,6 +277,7 @@ const ConnectionManager = (synth) => {
 function Synth() {
 
     const [descriptionNodes, setDescriptionNodes] = useState([])
+    const [liveNodes, setLiveNodes] = useState([])
     const [positions, setPositions] = useState({})
     const [synthState, setSynthState] = useState()
     const [connectionManager, setConnectionManager] = useState()
@@ -257,6 +289,7 @@ function Synth() {
             setPositions(value.description.positions)
             setSynthState(value.state)
             setConnectionManager(ConnectionManager(value))
+            setLiveNodes(value.nodes)
         }
         refreshUIBus.addListener(onSynthChange)
         return function cleanup() {
@@ -296,6 +329,8 @@ function Synth() {
             return <AudioNodePannerBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'Gain') {
             return <AudioNodeGainBox outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+        } else if (node.type === 'Analyser') {
+            return <AudioNodeAnalyserBox liveNode={liveNodes[id]} outputClicked={outputClicked} inputClicked={inputClicked} key={id} id={id} position={position} node={node} />
         }
     })
 

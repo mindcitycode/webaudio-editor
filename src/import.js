@@ -11,11 +11,12 @@ export const defaultSynthDescription = {
         { id: '6', type: 'ConstantSource' },
         { id: '7', type: 'Panner' },
         { id: '8', type: 'Gain' },
-
+        { id: '9', type: 'Analyser', props: { fftsize: 256 * 4 } }
     ],
     connections: [
         [{ id: '0' }, { id: '1', audioParam: 'detune' }],
         [{ id: '1' }, { id: '2' }],
+        [{ id: '1' }, { id: '9' }],
         [{ id: '2' }, { id: '3' }],
     ],
     positions: {
@@ -28,6 +29,7 @@ export const defaultSynthDescription = {
         '6': [200, 400],
         '7': [100, 500],
         '8': [300, 500],
+        '9': [500, 500],
     }
 }
 

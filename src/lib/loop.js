@@ -1,5 +1,5 @@
 export const rafLoop = f => {
-    let state = { halt: true }
+    let state = { halt: false }
     const frame = () => {
         const time = performance.now()
         const dt = time - lastTime
