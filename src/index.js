@@ -15,8 +15,13 @@ import { registerKeyboard } from './lib/keyboard'
 
 
 const go = async () => {
+
     const ac = await waitAudioContext()
-    const synth = loadAudioSynth(ac, defaultSynthDescription)
+
+    const loadedSynthDescription = await (await fetch("assets/synths/one.json")).json()
+   // const synthDescription = defaultSynthDescription
+    const synthDescription = loadedSynthDescription
+    const synth = loadAudioSynth(ac, synthDescription)
     ConnectionCanvas(getLinks(synth))
     refreshUIBus.say(synth)
     startAudioSynth(synth)
@@ -27,8 +32,8 @@ const go = async () => {
         refreshUIBus.say(synth)
     }, 1000)
     setInterval(() => {
- //       refreshUIBus.say(synth)
-   //     console.log(synth.description)//.nodes.map( nd => nd.type ))
+        //       refreshUIBus.say(synth)
+        //     console.log(synth.description)//.nodes.map( nd => nd.type ))
     }, 1000)
 }
 
