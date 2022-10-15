@@ -1,18 +1,11 @@
 //import 'litegraph.js/src/litegraph.css'
 import { waitAudioContext } from './audiolib/waitAudioContext'
-
 import { Bloc } from './bloc.js'
-
-
-
 import './components.js'
 import { loadAudioSynth, defaultSynthDescription, startAudioSynth, stopAudioSynth } from './import.js'
 import { refreshUIBus } from './components'
 import { ConnectionCanvas, getLinks } from './connectionsCanvas.js'
 import { registerKeyboard } from './lib/keyboard'
-
-
-
 
 const go = async () => {
 
