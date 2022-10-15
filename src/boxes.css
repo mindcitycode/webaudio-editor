@@ -26,7 +26,7 @@ div.wa-audio-node {
 }
 
 div.wa-audio-node:hover,
-div.wa-audio-node:hover input {
+div.wa-audio-node:hover input p {
     background-color: var(--global-hover-color)
 }
 
@@ -62,7 +62,7 @@ div.wa-audio-output p {
 }
 
 div.wa-audio-input:hover,
-div.wa-audio-param:hover,
+div.wa-audio-param:hover span,
 div.wa-audio-output:hover{
     background-color:  rgb(162, 147, 255);
 }
