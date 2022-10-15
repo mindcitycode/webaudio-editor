@@ -11,7 +11,7 @@ const go = async () => {
 
     const ac = await waitAudioContext()
 
-    const loadedSynthDescription = await (await fetch("assets/synths/five.json")).json()
+    const loadedSynthDescription = await (await fetch("assets/synths/six.json")).json()
     console.log(loadedSynthDescription)
     //const synthDescription = defaultSynthDescription
   const synthDescription = loadedSynthDescription
