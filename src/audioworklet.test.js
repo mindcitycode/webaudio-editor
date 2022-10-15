@@ -49,8 +49,6 @@ class LinearTransformNode extends AudioWorkletNode {
             numberOfOutputs: 1,
             channelCount: 1,
             processorOptions: {
-           //     offset: offset || 1,
-             //   multiplier: multiplier || 0.5,
                 bump: "joe"
             },
             parameterData: { multiplier, offset }
