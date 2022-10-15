@@ -1,4 +1,3 @@
-
 export const getAudioNodeAudioParamNames = (audioNode) => {
     const aps = []
     for (var prop in audioNode) {
@@ -6,7 +5,4 @@ export const getAudioNodeAudioParamNames = (audioNode) => {
             aps.push(prop)
     }
     return aps
-}
-export const inspectAudioParams = (audioNode) => {
-    const names = getAudioNodeAudioParamNames(audioNode)
 }
