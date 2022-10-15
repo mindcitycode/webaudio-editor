@@ -39,21 +39,28 @@ export const toJavascriptFunction = (desc = defaultSynthDescription) => {
 
     const code = [`const MySynth = ac => {`]
     const idxForId = {}
-    code.push('const n =[')
-    const nodeList = []
-    desc.nodes.forEach((nodeDescription, nodeDescriptionIndex) => {
-        idxForId[nodeDescription.id] = nodeDescriptionIndex
-        if (nodeDescription.type === 'Destination') {
-            nodeList.push('ac.destination')
-        } else {
-            nodeList.push('ac.create' + nodeDescription.type + '()')
-        }
-    })
-    code.push(nodeList.join(",\n"))
-    code.push(']')
+    //const nodeRefForId = id => `n[${idxForId[id]}]`
+    const nodeRefForId = id => `n${idxForId[id]}`
 
     desc.nodes.forEach((nodeDescription, nodeDescriptionIndex) => {
-        const nodeRef = `n[${idxForId[nodeDescription.id]}]`
+        idxForId[nodeDescription.id] = nodeDescriptionIndex
+    })
+
+    const nodeList = []
+    desc.nodes.forEach((nodeDescription) => {
+        const left = nodeRefForId(nodeDescription.id)
+        let right
+        if (nodeDescription.type === 'Destination') {
+            right = 'ac.destination'
+        } else {
+            right = 'ac.create' + nodeDescription.type + '()'
+        }
+        nodeList.push(`${left}=${right}`)
+    })
+    code.push(`const ${nodeList.join(",\n")} ;`)
+
+    desc.nodes.forEach((nodeDescription, nodeDescriptionIndex) => {
+        const nodeRef = nodeRefForId(nodeDescription.id)//`n[${idxForId[nodeDescription.id]}]`
         if (nodeDescription.props)
             for (let [name, value] of Object.entries(nodeDescription.props)) {
                 const floatValue = parseFloat(value)
@@ -69,15 +76,16 @@ export const toJavascriptFunction = (desc = defaultSynthDescription) => {
 
     })
     desc.connections.forEach(([from, to]) => {
-        const fromt = 'n[' + idxForId[from.id] + ']'
-        const tot = 'n[' + idxForId[to.id] + ']' + (to.audioParam ? ('.' + to.audioParam) : (''))
+        const fromt = nodeRefForId(from.id)//'n[' + idxForId[from.id] + ']'
+        const tot = nodeRefForId(to.id) + (to.audioParam ? ('.' + to.audioParam) : (''))
         code.push(fromt + '.connect(' + tot + ')')
     })
 
     code.push('}')
-    return code.join("\n")
+    const all = code.join("\n")
+    console.log(all)
+    return all
 }
-console.log(toJavascriptFunction())
 export const removeAudioNode = (ac, synth, nodeId) => {
 
     const { description, nodes } = synth

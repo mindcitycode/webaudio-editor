@@ -11,9 +11,10 @@ const go = async () => {
 
     const ac = await waitAudioContext()
 
-    const loadedSynthDescription = await (await fetch("assets/synths/one.json")).json()
-   // const synthDescription = defaultSynthDescription
-    const synthDescription = loadedSynthDescription
+    const loadedSynthDescription = await (await fetch("assets/synths/five.json")).json()
+    console.log(loadedSynthDescription)
+    //const synthDescription = defaultSynthDescription
+  const synthDescription = loadedSynthDescription
     const synth = loadAudioSynth(ac, synthDescription)
     ConnectionCanvas(getLinks(synth))
     refreshUIBus.say(synth)
