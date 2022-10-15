@@ -260,7 +260,7 @@ const AddBox = props => {
     return <div className='create-toolbar'>{buttons}</div>
 }
 
-import { addOrRemoveConnection, loadAudioNode, removeAudioNodeConnections } from './import.js';
+import { addOrRemoveConnection, loadAudioNode, removeAudioNodeConnections, toJavascriptFunction } from './import.js';
 import { rafLoop } from './lib/loop';
 import { updateView } from './audiolib/graphicAnalyzer';
 import { getScrollPosition } from './lib/dom.js';
@@ -301,8 +301,11 @@ const ConnectionManager = (synth) => {
 
 const SaveBox = (props) => {
     return <div className='file-toolbar'>
-        <button className='save-to-clipboard-button' onClick={props.copyToClipBoard}>
-            copy to clipboard
+        <button className='save-to-clipboard-button' onClick={props.copyJSONToClipBoard}>
+            copy JSON to clipboard
+        </button>
+        <button className='save-to-clipboard-button' onClick={props.copyJavascriptToClipBoard}>
+            copy javascript to clipboard
         </button>
     </div>
 }
@@ -390,7 +393,7 @@ function Synth() {
         loadAudioNode(liveNodes, descriptionNode)
         forceUpdate()
     }
-    const copyToClipBoard = async () => {
+    const buildSavable = () => {
 
         // collect positions
         const positions = {}
@@ -415,9 +418,17 @@ function Synth() {
             connections: connectionManager.getConnections(),
             positions: positions
         }
-        console.log('C', savable.connections)
+        return savable
+    }
+    const copyJSONToClipBoard = async () => {
+        const savable = buildSavable()
         const done = await navigator.clipboard.writeText(JSON.stringify(savable))
     }
+    const copyJavascriptToClipBoard = async () => {
+        const savable = buildSavable()
+        const js = toJavascriptFunction(savable)
+        const done = await navigator.clipboard.writeText(js)
+    }    
     const changedStandardParam = p => {
         const { id, standardParamName, value } = p
         // description 
@@ -458,7 +469,7 @@ function Synth() {
 
         <>
             <AddBox createAudioNode={createAudioNode} />
-            <SaveBox copyToClipBoard={copyToClipBoard} />
+            <SaveBox copyJSONToClipBoard={copyJSONToClipBoard} copyJavascriptToClipBoard={copyJavascriptToClipBoard} />
             <pre>{synthState}</pre>
             {boxes}
 
