@@ -11,26 +11,29 @@ export const defaultSynthDescription = {
         { id: '6', type: 'ConstantSource' },
         { id: '7', type: 'Panner' },
         { id: '8', type: 'Gain', audioParams: { gain: 0 } },
-        { id: '9', type: 'Analyser', props: { fftsize: 256 * 4 } }
+        { id: '9', type: 'Analyser', props: { fftsize: 256 * 4 } },
+        { id: '10', type: 'Gain', audioParams: { gain: 0.25 } },
     ],
     connections: [
         [{ id: '1' }, { id: '8' }],
         [{ id: '2' }, { id: '3' }],
         [{ id: '0' }, { id: '8', audioParam: 'gain' }],
         [{ id: '8' }, { id: '9' }],
-        [{ id: '9' }, { id: '3' }],
+        [{ id: '8' }, { id: '10' }],
+        [{ id: '10' }, { id: '3' }],
     ],
     positions: {
         '0': [50, 100],
         '1': [200, 40],
-        '2': [400, 200],
-        '3': [600, 300],
+        '2': [400, 500],
+        '3': [600, 500],
         '4': [10, 200],
         '5': [200, 200],
         '6': [200, 400],
         '7': [100, 500],
         '8': [400, 100],
         '9': [600, 100],
+        '10':[500,300]
     }
 }
 //console.log({defaultSynthDescription})
