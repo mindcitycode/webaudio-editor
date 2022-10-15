@@ -36,12 +36,12 @@ function OutputBox(props) {
 
 function AudioNodeOscillatorBox(props) {
 
-    const [left, top] = props.position.map(x => x + 'px')
+    const audioNodeName = "oscillator"
     const node = props.node
+    const [left, top] = props.position.map(x => x + 'px')
 
     const [type, setType] = useState("sine")
     const types = ["sine", "square", "sawtooth", "triangle"]
-    const audioNodeName = "oscillator"
     const typeList = types.map((type) =>
         <option key={type}> {type}</option>
     );
@@ -54,7 +54,7 @@ function AudioNodeOscillatorBox(props) {
     return (
         <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
-            <select onChange={changedStandardParam('type')} value={node.props.type}   >{typeList}</select>
+            <select onChange={changedStandardParam('type')} value={node.props.type}>{typeList}</select>
             <AudioParamBox changedAudioParam={changedAudioParam} audioParamClicked={audioParamClicked} name="detune" value={node.audioParams.detune}></AudioParamBox>
             <AudioParamBox changedAudioParam={changedAudioParam} audioParamClicked={audioParamClicked} name="frequency" value={node.audioParams.frequency}></AudioParamBox>
             <OutputBox outputClicked={outputClicked} num="1"></OutputBox>
@@ -102,17 +102,28 @@ function AudioNodeDelayBox(props) {
 }
 function AudioNodeBiquadFilterBox(props) {
     const [left, top] = props.position.map(x => x + 'px')
-
+    const node = props.node
+   
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const inputClicked = num => props.inputClicked({ id: props.id, num })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
     const clicked = () => props.setSelectedBox(props.id)
     const changedAudioParam = pv => props.changedAudioParam({ ...pv, id: props.id })
+    const changedStandardParam = standardParamName => e => props.changedStandardParam({ id: props.id, standardParamName, value: e.target.value })
+
+
+    const [type, setType] = useState("lowpass")
+    const types = ["lowpass", "highpass", "bandpass", "lowshelf",'highshelf','peaking','notch','allpass']
+    const typeList = types.map((type) =>
+        <option key={type}> {type}</option>
+    );
+
 
     const audioNodeName = "biquad"
     return (
         <div onClick={clicked} className={"wa-audio-node movable " + selectedClass(props)} id={props.id} style={{ left, top }}>
             <h1>{audioNodeName}</h1>
+            <select onChange={changedStandardParam('type')} value={node.props.type}>{typeList}</select>
             <InputBox inputClicked={inputClicked} num="1"></InputBox>
             <AudioParamBox changedAudioParam={changedAudioParam} audioParamClicked={audioParamClicked} name="frequency" value={props.node.audioParams.frequency}></AudioParamBox>
             <AudioParamBox changedAudioParam={changedAudioParam} audioParamClicked={audioParamClicked} name="detune" value={props.node.audioParams.detune}></AudioParamBox>
@@ -428,7 +439,7 @@ function Synth() {
         const savable = buildSavable()
         const js = toJavascriptFunction(savable)
         const done = await navigator.clipboard.writeText(js)
-    }    
+    }
     const changedStandardParam = p => {
         const { id, standardParamName, value } = p
         // description 
@@ -451,7 +462,7 @@ function Synth() {
         } else if (node.type === 'Destination') {
             return <AudioNodeDestinationBox changedAudioParam={changedAudioParam} isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'BiquadFilter') {
-            return <AudioNodeBiquadFilterBox changedAudioParam={changedAudioParam} isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
+            return <AudioNodeBiquadFilterBox changedStandardParam={changedStandardParam} changedAudioParam={changedAudioParam} isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'DynamicsCompressor') {
             return <AudioNodeDynamicsCompressorBox changedAudioParam={changedAudioParam} isSelected={isSelected} setSelectedBox={setSelectedBox} outputClicked={outputClicked} inputClicked={inputClicked} audioParamClicked={audioParamClicked} key={id} id={id} position={position} node={node} />
         } else if (node.type === 'ConstantSource') {

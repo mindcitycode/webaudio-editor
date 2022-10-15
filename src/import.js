@@ -157,6 +157,7 @@ export const loadAudioSynth = (ac, description) => {
     description.nodes.forEach((nodeDescription, nodeIndex) => {
         const { type, id, props } = nodeDescription
         if (nodeDescription.audioParams === undefined) nodeDescription.audioParams = {}
+        if (nodeDescription.props === undefined) nodeDescription.props = {}
         const { audioParams } = nodeDescription
 
         let node
