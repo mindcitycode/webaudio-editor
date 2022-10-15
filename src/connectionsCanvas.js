@@ -4,14 +4,16 @@ import { getScrollPosition } from './lib/dom.js'
 export const getLinks = synth => () => {
 
     const connectedElements = []
+
+    // get dom elements connected pairs
     synth.description.connections.forEach(([from, to]) => {
         const fromId = from.id
         const toId = to.id
         const fromNode = document.getElementById(fromId)
-        if (!fromNode ) return 
+        if (!fromNode) return
 
         let fromElement = fromNode.querySelector(`[name="${1}"].wa-audio-output`)
-        if (!fromElement ) return 
+        if (!fromElement) return
 
         const toNode = document.getElementById(toId)
         if (!toNode) return
@@ -26,6 +28,7 @@ export const getLinks = synth => () => {
         }
     })
 
+    // get x/y connected pairs
     const links = []
     connectedElements.forEach(({ fromElement, toElement }) => {
 
