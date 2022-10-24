@@ -39,9 +39,6 @@ const go = async () => {
         synthDescription = defaultSynthDescription
     }
 
-    //    const loadedSynthDescription = (startBlank)?(await (await fetch("assets/synths/six.json")).json())
-    //  const synthDescription = defaultSynthDescription
-    //const synthDescription = loadedSynthDescription
     const synth = loadAudioSynth(ac, synthDescription)
     ConnectionCanvas(getLinks(synth))
     refreshUIBus.say(synth)
