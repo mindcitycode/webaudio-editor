@@ -15,7 +15,17 @@ const StartParams = {
 
 }
 import { Dropper } from './dragdrop.js'
+import { LocalJSONFileSystem } from './lib/locaJSONFileSystem.js'
 const go = async () => {
+
+    const localFs = new LocalJSONFileSystem("synths")
+    console.log('ls', localFs.ls())
+    localFs.rm("fichier2")
+    console.log('ls', localFs.ls())
+    localFs.writeFile("fichier1",{ contenu: 'oo' },true)
+    console.log('read',   localFs.readFile("fichier1"))
+ //   localFs.writeFile("fichier2",{ contenu: 'aoo' })
+    console.log('read',   localFs.readFile("fichier2"))
 
     const dropper = Dropper()
     dropper.bus.addListener((...e) => {
