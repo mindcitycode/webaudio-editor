@@ -2,19 +2,45 @@
 import { waitAudioContext } from './audiolib/waitAudioContext'
 import { Bloc } from './bloc.js'
 import './components.js'
-import { loadAudioSynth, defaultSynthDescription, startAudioSynth, stopAudioSynth } from './import.js'
+import { loadAudioSynth, defaultSynthDescription,defaultEmptySynthDescription, startAudioSynth, stopAudioSynth } from './import.js'
 import { refreshUIBus } from './components'
 import { ConnectionCanvas, getLinks } from './connectionsCanvas.js'
 import { registerKeyboard } from './lib/keyboard'
 import { OneBisAudioWorket } from './audioworklet.test'
 
+
+const StartParams = {
+    blank: new URL(document.URL).searchParams.has('blank'),
+    asset: new URL(document.URL).searchParams.get('asset'),
+
+}
 const go = async () => {
 
     const ac = await waitAudioContext()
-    OneBisAudioWorket(ac)
-    return
-    const loadedSynthDescription = await (await fetch("assets/synths/six.json")).json()
-    const synthDescription = defaultSynthDescription
+    //OneBisAudioWorket(ac)
+    //return
+    let synthDescription
+
+    if (StartParams.blank) {
+        console.log('starting blank')
+        synthDescription = defaultEmptySynthDescription
+    } else if (StartParams.asset) {
+        // "assets/synths/six.json"
+        console.log('starting with asset', StartParams.asset)
+        const assetPath = `assets/synths/${StartParams.asset}`
+        try {
+            synthDescription = (await (await fetch(assetPath)).json())
+        } catch (e) {
+            console.error(e)
+            synthDescription = defaultSynthDescription
+        }
+    } else {
+        console.log('starting with simple default synth')
+        synthDescription = defaultSynthDescription
+    }
+
+    //    const loadedSynthDescription = (startBlank)?(await (await fetch("assets/synths/six.json")).json())
+    //  const synthDescription = defaultSynthDescription
     //const synthDescription = loadedSynthDescription
     const synth = loadAudioSynth(ac, synthDescription)
     ConnectionCanvas(getLinks(synth))

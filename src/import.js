@@ -1,5 +1,21 @@
 import { getAudioNodeAudioParamNames } from "./inspect"
-//const json0 = `{"nodes":[{"id":"0","type":"Oscillator","props":{"type":"sine"},"audioParams":{"frequency":1,"detune":0}},{"id":"1","type":"Oscillator","props":{"type":"sine"},"audioParams":{"frequency":301,"detune":0}},{"id":"2","type":"Delay","audioparams":{"delayTime":{"value":100}},"audioParams":{"delayTime":0}},{"id":"3","type":"Destination","audioParams":{}},{"id":"4","type":"BiquadFilter","audioParams":{"frequency":350,"detune":0,"Q":1,"gain":0}},{"id":"5","type":"DynamicsCompressor","audioParams":{"threshold":-24,"knee":30,"ratio":12,"attack":0.003000000026077032,"release":0.25}},{"id":"6","type":"ConstantSource","audioParams":{"offset":1}},{"id":"7","type":"Panner","audioParams":{"positionX":0,"positionY":0,"positionZ":0,"orientationX":1,"orientationY":0,"orientationZ":0}},{"id":"8","type":"Gain","audioParams":{"gain":0}},{"id":"9","type":"Analyser","props":{"fftsize":1024},"audioParams":{}},{"id":0.18588669028603766,"type":"Oscillator","audioParams":{"frequency":440,"detune":0}},{"id":0.8306788815611394,"type":"Delay","audioParams":{"delayTime":0}},{"id":0.2319616418614543,"type":"Analyser","audioParams":{}}],"connections":[[{"id":"1"},{"id":"8"}],[{"id":"2"},{"id":"3"}],[{"id":"0"},{"id":"8","audioParam":"gain"}],[{"id":"8"},{"id":"9"}],[{"id":"9"},{"id":"3"}],[{"id":0.18588669028603766,"num":"1"},{"id":0.8306788815611394,"num":"1"}],[{"id":0.8306788815611394,"num":"1"},{"id":0.2319616418614543,"num":"1"}]],"positions":{"0":[50,100],"1":[200,40],"2":[400,200],"3":[600,300],"4":[10,200],"5":[200,200],"6":[200,400],"7":[100,500],"8":[400,100],"9":[600,100],"0.18588669028603766":[329,361],"0.8306788815611394":[466,378],"0.2319616418614543":[412,450]}}`
+
+export const defaultEmptySynthDescription = {
+    nodes: [
+        { id: '1', type: 'Gain', audioParams: { gain: 0.5 } },
+        { id: '2', type: 'Analyser', props: { fftsize: 256 * 4 } },
+        { id: '3', type: 'Destination' },
+    ],
+    connections: [
+        [{ id: '1' }, { id: '2' }],
+        [{ id: '1' }, { id: '3' }],
+    ],
+    positions: {
+        '1': [50, 100],
+        '2': [200, 40],
+        '3': [200, 200],
+    }
+}
 export const defaultSynthDescription = {
     nodes: [
         { id: '0', type: 'Oscillator', props: { type: 'sine' }, audioParams: { frequency: 1 } },
@@ -33,7 +49,7 @@ export const defaultSynthDescription = {
         '7': [100, 500],
         '8': [400, 100],
         '9': [600, 100],
-        '10':[500,300]
+        '10': [500, 300]
     }
 }
 //console.log({defaultSynthDescription})
