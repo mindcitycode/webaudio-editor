@@ -204,7 +204,7 @@ export const loadAudioSynth = (ac, description) => {
     })
 
     const synth = { description, nodes, state: 'ready' }
-    console.log(synth)
+    console.log({synth})
     return synth
 }
 
