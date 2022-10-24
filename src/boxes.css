@@ -91,6 +91,9 @@ div.file-toolbar {
     width: 100%;
 }
 
+.drag-to-save {
+    background-color :orange;    
+}
 
 
 /*div.create-toolbar*/ button {

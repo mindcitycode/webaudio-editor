@@ -103,7 +103,7 @@ function AudioNodeDelayBox(props) {
 function AudioNodeBiquadFilterBox(props) {
     const [left, top] = props.position.map(x => x + 'px')
     const node = props.node
-   
+
     const audioParamClicked = name => props.audioParamClicked({ id: props.id, audioParam: name })
     const inputClicked = num => props.inputClicked({ id: props.id, num })
     const outputClicked = num => props.outputClicked({ id: props.id, num })
@@ -113,7 +113,7 @@ function AudioNodeBiquadFilterBox(props) {
 
 
     const [type, setType] = useState("lowpass")
-    const types = ["lowpass", "highpass", "bandpass", "lowshelf",'highshelf','peaking','notch','allpass']
+    const types = ["lowpass", "highpass", "bandpass", "lowshelf", 'highshelf', 'peaking', 'notch', 'allpass']
     const typeList = types.map((type) =>
         <option key={type}> {type}</option>
     );
@@ -311,6 +311,26 @@ const ConnectionManager = (synth) => {
 
 
 const SaveBox = (props) => {
+    const onDragStart = (ev) => {
+        
+        // drag and drop file
+        // seems not to exist anymore
+
+        // but drag drop of text / json is possible
+        ///ev.dataTransfer.clearData();
+        // const savable = props.buildSavable()
+
+        //        ev.dataTransfer.setData("DownloadURL", "data:application/octet-stream;base64,eNcoDEdFiLEStuFf");
+
+        //var blob = new Blob([JSON.stringify(savable, null, 2)], {type : 'application/json'});
+        //const file = new File([blob],'filename.json')
+        //console.log('gile',file)
+        //ev.dataTransfer.setData("DownloadURL",file)
+        //ev.dataTransfer.files = [file]
+        //ev.dataTransfer.setData("text/json",file)
+        // ev.dataTransfer.setData("text/plain", JSON.stringify(savable) )
+        console.log('onDragStart')
+    }
     return <div className='file-toolbar'>
         <button className='save-to-clipboard-button' onClick={props.copyJSONToClipBoard}>
             copy JSON to clipboard
@@ -318,7 +338,11 @@ const SaveBox = (props) => {
         <button className='save-to-clipboard-button' onClick={props.copyJavascriptToClipBoard}>
             copy javascript to clipboard
         </button>
-    </div>
+        {/*       <button draggable onDragStart={onDragStart}
+            className='save-to-clipboard-button drag-to-save' onClick={props.copyJavascriptToClipBoard}>
+            drag to save
+        </button>
+   */}  </div>
 }
 
 function Synth() {
@@ -480,7 +504,7 @@ function Synth() {
 
         <>
             <AddBox createAudioNode={createAudioNode} />
-            <SaveBox copyJSONToClipBoard={copyJSONToClipBoard} copyJavascriptToClipBoard={copyJavascriptToClipBoard} />
+            <SaveBox buildSavable={buildSavable} copyJSONToClipBoard={copyJSONToClipBoard} copyJavascriptToClipBoard={copyJavascriptToClipBoard} />
             <pre>{synthState}</pre>
             {boxes}
 
