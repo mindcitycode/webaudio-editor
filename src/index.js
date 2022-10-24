@@ -12,7 +12,7 @@ import { OneBisAudioWorket } from './audioworklet.test'
 const StartParams = {
     blank: new URL(document.URL).searchParams.has('blank'),
     asset: new URL(document.URL).searchParams.get('asset'),
-
+    local: new URL(document.URL).searchParams.get('local'),
 }
 import { Dropper } from './dragdrop.js'
 import { LocalJSONFileSystem } from './lib/locaJSONFileSystem.js'
@@ -20,16 +20,22 @@ const go = async () => {
 
     const localFs = new LocalJSONFileSystem("synths")
     console.log('ls', localFs.ls())
-    localFs.rm("fichier2")
-    console.log('ls', localFs.ls())
-    localFs.writeFile("fichier1",{ contenu: 'oo' },true)
-    console.log('read',   localFs.readFile("fichier1"))
- //   localFs.writeFile("fichier2",{ contenu: 'aoo' })
-    console.log('read',   localFs.readFile("fichier2"))
-
+    /*   localFs.rm("fichier2")
+       console.log('ls', localFs.ls())
+       localFs.writeFile("fichier1",{ contenu: 'oo' },true)
+       console.log('read',   localFs.readFile("fichier1"))
+    //   localFs.writeFile("fichier2",{ contenu: 'aoo' })
+       console.log('read',   localFs.readFile("fichier2"))
+   */
     const dropper = Dropper()
-    dropper.bus.addListener((...e) => {
-        console.log('dropped', ...e)
+    dropper.bus.addListener(drops => {
+        console.log('dropped', drops)
+        drops.forEach(drop => {
+
+            console.log("write file", drop)
+            localFs.writeFile(drop.name, drop.object)
+        })
+
     })
     const ac = await waitAudioContext()
     //OneBisAudioWorket(ac)
@@ -49,6 +55,9 @@ const go = async () => {
             console.error(e)
             synthDescription = defaultSynthDescription
         }
+    } else if (StartParams.local){  
+        console.log('starting with localstorage item', StartParams.local)
+        synthDescription = localFs.readFile(StartParams.local)
     } else {
         console.log('starting with simple default synth')
         synthDescription = defaultSynthDescription

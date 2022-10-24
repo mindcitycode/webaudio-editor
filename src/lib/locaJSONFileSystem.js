@@ -1,6 +1,6 @@
 import { Persisted } from './persist.js'
 
-class LocalJSONFileExistsError extends Error {}
+class LocalJSONFileExistsError extends Error { }
 export class LocalJSONFileSystem {
 
     static CREATION_DATE = 'CREATION_DATE'
@@ -10,7 +10,7 @@ export class LocalJSONFileSystem {
     table = undefined
 
     constructor(name) {
-        console.log('BUILD WITH', name)
+        console.log('Start LocalJSONFileSystem', name)
         this.name = name
         this.table = Persisted(name)
         if (!this.table.get()) {
@@ -39,7 +39,6 @@ export class LocalJSONFileSystem {
         this.table.set(table)
     }
     writeFile(filename, data, overwrite = false) {
-        console.log('write file')
         const now = Date.now()
         const md = this.getFileMetaData(filename)
 
@@ -55,16 +54,16 @@ export class LocalJSONFileSystem {
             throw new LocalJSONFileExistsError(`file ${filename} exists`)
         }
     }
-    fileExists(filename){
+    fileExists(filename) {
         const md = this.getFileMetaData(filename)
-        return md?true:false
+        return md ? true : false
     }
     readFile(filename) {
         return Persisted(filename).get() || undefined
     }
-    rm(filename){
+    rm(filename) {
         const table = this.table.get()
-        if (table[filename]){
+        if (table[filename]) {
             delete table[filename]
             this.table.set(table)
             const p = Persisted(filename)
