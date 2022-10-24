@@ -2,7 +2,7 @@
 import { waitAudioContext } from './audiolib/waitAudioContext'
 import { Bloc } from './bloc.js'
 import './components.js'
-import { loadAudioSynth, defaultSynthDescription,defaultEmptySynthDescription, startAudioSynth, stopAudioSynth } from './import.js'
+import { loadAudioSynth, defaultSynthDescription, defaultEmptySynthDescription, startAudioSynth, stopAudioSynth } from './import.js'
 import { refreshUIBus } from './components'
 import { ConnectionCanvas, getLinks } from './connectionsCanvas.js'
 import { registerKeyboard } from './lib/keyboard'
@@ -14,8 +14,13 @@ const StartParams = {
     asset: new URL(document.URL).searchParams.get('asset'),
 
 }
+import { Dropper } from './dragdrop.js'
 const go = async () => {
 
+    const dropper = Dropper()
+    dropper.bus.addListener((...e) => {
+        console.log('dropped', ...e)
+    })
     const ac = await waitAudioContext()
     //OneBisAudioWorket(ac)
     //return

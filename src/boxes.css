@@ -4,7 +4,9 @@
     margin: 0px;
     user-select: none;
 }
-
+body.drop-zone {
+    filter : contrast(10%);
+}
 div.wa-audio-node option,
 div.wa-audio-node select,
 html {
