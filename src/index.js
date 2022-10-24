@@ -16,32 +16,32 @@ const StartParams = {
 }
 import { Dropper } from './dragdrop.js'
 import { LocalJSONFileSystem } from './lib/locaJSONFileSystem.js'
+
+import { reloadWithParams} from './lib/reload.js'
+
 const go = async () => {
 
+
+    // init localstorage wrapper
     const localFs = new LocalJSONFileSystem("synths")
     console.log('ls', localFs.ls())
-    /*   localFs.rm("fichier2")
-       console.log('ls', localFs.ls())
-       localFs.writeFile("fichier1",{ contenu: 'oo' },true)
-       console.log('read',   localFs.readFile("fichier1"))
-    //   localFs.writeFile("fichier2",{ contenu: 'aoo' })
-       console.log('read',   localFs.readFile("fichier2"))
-   */
+
+    // save dropped synth descriptions to localstorage
     const dropper = Dropper()
     dropper.bus.addListener(drops => {
-        console.log('dropped', drops)
+        let lastDrop = undefined
         drops.forEach(drop => {
-
-            console.log("write file", drop)
-            localFs.writeFile(drop.name, drop.object)
+            console.log("write drop", drop)
+            localFs.writeFile(drop.name, drop.object, true)
+            lastDrop = drop
         })
-
+        reloadWithParams({ local: lastDrop.name })
     })
-    const ac = await waitAudioContext()
-    //OneBisAudioWorket(ac)
-    //return
-    let synthDescription
 
+
+    // load a synth description
+
+    let synthDescription
     if (StartParams.blank) {
         console.log('starting blank')
         synthDescription = defaultEmptySynthDescription
@@ -55,7 +55,7 @@ const go = async () => {
             console.error(e)
             synthDescription = defaultSynthDescription
         }
-    } else if (StartParams.local){  
+    } else if (StartParams.local) {
         console.log('starting with localstorage item', StartParams.local)
         synthDescription = localFs.readFile(StartParams.local)
     } else {
@@ -63,6 +63,7 @@ const go = async () => {
         synthDescription = defaultSynthDescription
     }
 
+    const ac = await waitAudioContext()
     const synth = loadAudioSynth(ac, synthDescription)
     ConnectionCanvas(getLinks(synth))
     refreshUIBus.say(synth)
