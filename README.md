@@ -22,4 +22,4 @@ build
 
 ## license
 
-webaudio-editor is licensed under the agpl-3.0 license
+webaudio-editor is licensed under the AGPL-3.0-only license
